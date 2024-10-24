@@ -10,11 +10,11 @@
 <body>
     
     <div class="stats" id="poke-rival">
-        <h3 id="nombrePoke-rival"></h3>
-        <p id="tipoRival"></p>
-        <p id="tipoRival2"></p>
+        <h3 id="nombreRival"></h3>
+        <p id="tipo1Riva"></p>
+        <p id="tipo2Rival"></p>
         <p>Vida: <span id="vidaRival"></span></p>
-        <p>Ataque: <span id="ataqueRival"></span></p>
+        <p>Ataque: <span id="ataqueFisRival"></span></p>
         <p>Ataque Especial: <span id="ataqueEspRival"></span></p>
         <p>Defensa Especial: <span id="defensaEspRival"></span></p>
         <p>Defensa Fisica: <span id="defensaFisRival"></span></p>
@@ -22,25 +22,19 @@
     </div>
  
     <div class="arena">
-        <img id="poke2" src="" alt="">
-        <img id="poke" src="" alt="">
+        <img id="pokeRival" src="" alt="">
+        <img id="pokePropio" src="" alt="">
     </div>
 
     <div class="stats" id="poke-propio">
-        <h3 id="nombrePoke-propio"></h3>
-        <p id="tipoPropio"></p>
-        <p id="tipoPropio2"></p>
-        <p>Vida: <span id="vidaPropio"></span></p>
-        <p>Ataque: <span id="ataquePropio"></span></p>
-        <p>Ataque Especial: <span id="ataqueEspPropio"></span></p>
         
     </div>
 
     <div>
-        <input id="input" max="999" type="number">
+        <input id="input" max="1000" type="number">
         <button id="btn-poke">Elegir poke</button>
-        <button id="combate">Ataque Fisico</button>
-        <button id="combate">Ataque Especial</button>
+        <button id="btn-atk-fis">Ataque Fisico</button>
+        <button id="btn-atk-esp">Ataque Especial</button>
     </div>
     <script src="./app.js"></script>
 </body>

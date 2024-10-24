@@ -1,47 +1,40 @@
 //Atributos poke rival
-const imgPoke2 = document.querySelector('#poke2');
-const namePoke2 = document.querySelector('#nombrePoke-rival');
-const poke2Tipo = document.querySelector('#tipoRival');
-const poke2Tipo2 = document.querySelector('#tipoRival2');
-const poke2Ataque = document.querySelector('#ataqueRival');
-const atkEspRival = document.querySelector('#ataqueEspRival');
-const vidaRival = document.querySelector('#vidaRival');
-const defensaEspRival = document.querySelector('#defensaEspRival');
-const defensaFisRival = document.querySelector('#defensaFisRival');
-const velocidadRival = document.querySelector('#velocidadRival');
+const imgRival = document.querySelector();
+const nombreRival = document.querySelector();
+const tipo1Rival = document.querySelector();
+const tipo2Rival = document.querySelector();
+const atkFisRival = document.querySelector(); 
+const atkEspRival = document.querySelector();
+const vidaRival = document.querySelector();
+const defensaEspRival = document.querySelector();
+const defensaFisRival = document.querySelector();
+const velocidadRival = document.querySelector();
 
 //Atributos poke propio
-const imgPoke = document.querySelector('#poke');
-const namePoke = document.querySelector('#nombrePoke-propio');
-const pokeTipo = document.querySelector('#tipoPropio');
-const pokeTipo2 = document.querySelector('#tipoPropio2');
-const pokeAtaque = document.querySelector('#ataquePropio');
-const atkEspPropio = document.querySelector('#ataqueEspPropio');
-const vidaPropio = document.querySelector('#vidaPropio');
+
+//Interfaz de usuario
 
 const input = document.querySelector('#input');
 const btnElegir = document.querySelector('#btn-poke');
-const btnPelear  = document.querySelector('#combate');
+const btnAtkFis  = document.querySelector('#btn-atk-fis');
+const btnAtkEsp  = document.querySelector('#btn-atk-esp');
 
+//Método de número random
 const getNumRandom = () => {
     let min = Math.ceil(0);
     let max = Math.floor(1001);
 
     return Math.floor(Math.random() * (max - min) + min);
   }
+
 //Se elegirá un pokemon pero solo del tipo fantasma, el tipo de elección del pokemon queda a criterio del desarrollador, que sea divertido.
 const obtenerPokePropio = ()=>{
     const num = input.value;
 
     axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`).then((res)=>{
-        console.log(res);
         return res.data
     }).then((res)=>{
         console.log(res);
-        imgPoke.src = res.sprites.back_default;
-        pokeTipo.innerHTML = res.types[0].type.name;
-        namePoke.innerHTML = res.name;
-        pokeAtaque.innerHTML = res.stats[0].base_stat;
     })
 }
 //Se generará un pokemon rival aleatorio 
@@ -50,23 +43,10 @@ const obtenerPokeRival = () =>{
     const numPokeRival = getNumRandom();
 
     axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`).then((res)=>{
-        console.log(res);
         return res.data
     }).then((res)=>{
         console.log(res);
-        imgPoke2.src = res.sprites.front_default;
-        poke2Tipo.innerHTML = res.types[0].type.name;
-        namePoke2.innerHTML = res.name;
-        poke2Ataque.innerHTML = res.stats[1].base_stat;
-        atkEspRival.innerHTML = res.stats[3].base_stat;
-        vidaRival.innerHTML = res.stats[0].base_stat;
-        poke2Tipo2.innerHTML = res.types[1].type.name;
-        defensaEspRival.innerHTML = res.stats[4].base_stat;
-        defensaFisRival.innerHTML = res.stats[2].base_stat;
-        velocidadRival.innerHTML = res.stats[5].base_stat;
     })
-
-    console.log(imgPoke2);
 }
 //Combate, el pokemon perdedor será el que se le acabe primero su vida.
 //El usuario deberá elegir si ocupa ataque fisico o especial, según lo elegido los pokemon usarán su defensa especial o defensa fisica para bloquear los ataques
@@ -82,15 +62,13 @@ const obtenerPokeRival = () =>{
 //Mostrar el ganador
 const combate = ()=>{
     
-    const ataqueRival = parseInt(poke2Ataque.textContent);
-    const ataquePropio = parseInt(pokeAtaque.textContent);
-
-    console.log(ataquePropio);
     
 }
 
 
 window.addEventListener('load', obtenerPokeRival);
+
 btnElegir.addEventListener('click', obtenerPokePropio);
-btnPelear.addEventListener('click', combate);
+
+btnPelear.addEventListener();
 
