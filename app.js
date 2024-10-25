@@ -1,16 +1,26 @@
 //Atributos poke rival
-const imgRival = document.querySelector();
-const nombreRival = document.querySelector();
-const tipo1Rival = document.querySelector();
-const tipo2Rival = document.querySelector();
-const atkFisRival = document.querySelector(); 
-const atkEspRival = document.querySelector();
-const vidaRival = document.querySelector();
-const defensaEspRival = document.querySelector();
-const defensaFisRival = document.querySelector();
-const velocidadRival = document.querySelector();
+const imgRival = document.querySelector('#pokeRival'); //querySelectroAll('div')
+const nombreRival = document.querySelector('#nombreRival');
+const tipo1Rival = document.querySelector('#tipo1Rival');
+const tipo2Rival = document.querySelector('#tipo2Rival');
+const atkFisRival = document.querySelector('#ataqueFisRival'); 
+const atkEspRival = document.querySelector('#ataqueEspRival');
+const vidaRival = document.querySelector('#vidaRival');
+const defensaEspRival = document.querySelector('#defensaEspRival');
+const defensaFisRival = document.querySelector('#defensaFisRival');
+const velocidadRival = document.querySelector('#velocidadRival');
 
 //Atributos poke propio
+const imgPropio = document.querySelector('#pokePropio'); //querySelectroAll('div')
+const nombrePropio = document.querySelector('#nombrePropio');
+const tipo1Propio = document.querySelector('#tipo1Propio');
+const tipo2Propio = document.querySelector('#tipo2Propio');
+const atkFisPropio = document.querySelector('#ataqueFisPropio'); 
+const atkEspPropio = document.querySelector('#ataqueEspPropio');
+const vidaPropio = document.querySelector('#vidaPropio');
+const defensaEspPropio = document.querySelector('#defensaEspPropio');
+const defensaFisPropio = document.querySelector('#defensaFisPropio');
+const velocidadPropio = document.querySelector('#velocidadPropio');
 
 //Interfaz de usuario
 
@@ -18,6 +28,7 @@ const input = document.querySelector('#input');
 const btnElegir = document.querySelector('#btn-poke');
 const btnAtkFis  = document.querySelector('#btn-atk-fis');
 const btnAtkEsp  = document.querySelector('#btn-atk-esp');
+//const btnCombate =
 
 //Método de número random
 const getNumRandom = () => {
@@ -31,21 +42,57 @@ const getNumRandom = () => {
 const obtenerPokePropio = ()=>{
     const num = input.value;
 
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`).then((res)=>{
+    console.log(num);
+
+    axios.get("https://pokeapi.co/api/v2/pokemon/${num}").then((res)=>{   // THEN si se cumple lo de antes
+        console.log(res.data);
         return res.data
     }).then((res)=>{
-        console.log(res);
+        //console.log(res);
+        imgPropio.src = res.sprites.back_default;
+        nombrePropio.innerHTML = res.name;
+        tipo1Propio.innerHTML = res.types[0].type.name;
+
+        if(res.types[1].type.name == undefined){
+            tipo2Propio.innerHTML = '';
+        }else{
+            tipo2Propio.innerHTML = res.types[1].type.name;
+        }
+        vidaPropio.innerHTML = res.stats[0].base_stat;
+        atkFisPropio.innerHTML = res.stats[1].base_stat;
+        defensaFisPropio.innerHTML = res.stats[2].base_stat;
+        atkEspPropio.innerHTML = res.stats[3].base_stat;
+        defensaEspPropio.innerHTML = res.stats[4].base_stat;
+        velocidadPropio.innerHTML = res.stats[5].base_stat;
     })
 }
 //Se generará un pokemon rival aleatorio 
 const obtenerPokeRival = () =>{
 
     const numPokeRival = getNumRandom();
-
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`).then((res)=>{
+    console.log(numPokeRival);
+    
+    axios.get("https://pokeapi.co/api/v2/pokemon/${numPokeRival}").then((res)=>{
+        console.log(res.data);
         return res.data
     }).then((res)=>{
-        console.log(res);
+        //console.log(res);
+        imgRival.src = res.sprites.front_default;
+        nombreRival.innerHTML = res.name;
+        tipo1Rival.innerHTML = res.types[0].type.name;
+
+        if(res.types[1].type.name == undefined){
+            tipo2Rival.innerHTML = '';
+        }else{
+            tipo2Rival.innerHTML = res.types[1].type.name;
+        }
+
+        vidaRival.innerHTML = res.stats[0].base_stat;
+        atkFisRival.innerHTML = res.stats[1].base_stat;
+        defensaFisRival.innerHTML = res.stats[2].base_stat;
+        atkEspRival.innerHTML = res.stats[3].base_stat;
+        defensaEspRival.innerHTML = res.stats[4].base_stat;
+        velocidadRival.innerHTML = res.stats[5].base_stat;
     })
 }
 //Combate, el pokemon perdedor será el que se le acabe primero su vida.
@@ -61,7 +108,7 @@ const obtenerPokeRival = () =>{
 //Se turnarán los pokemon hasta que haya un ganador
 //Mostrar el ganador
 const combate = ()=>{
-    
+    console.log('Estan peleando');
     
 }
 
@@ -70,5 +117,4 @@ window.addEventListener('load', obtenerPokeRival);
 
 btnElegir.addEventListener('click', obtenerPokePropio);
 
-btnPelear.addEventListener();
-
+btnAtkFis.addEventListener('click',combate);
