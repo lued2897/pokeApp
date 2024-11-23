@@ -1,3 +1,5 @@
+/*css*/
+
 body{
     height: 100vh;
     width: 100vw;
@@ -5,35 +7,138 @@ body{
     flex-direction: column;
 }
 
+
+.GameArea{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+
+}
 #UI{
-    height: 10%;
-    width: 100%;
+    margin-left:auto;
+    margin-right: auto;
+    margin-top: 5%;
+    display: flex;
+    width: 50%;
+    background-color: aqua;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
 }
 
 #arena{
-    display: flex;
-    height: 50%;
+    width: 65.7vh;
+    height: 37vh;
     background-image: url('./fondo.png');
     background-repeat: no-repeat;
     background-size: contain;
+    background-position: center;
+    /*border: 10px;
+    border-style: solid;
+    border-color: #411e09f7;*/
 }
 #pokePropio{
-    position: fixed;
-    top: 430px;
-    left: 100px;
+    position: relative;
+    top: 42%;
+    left: 17%;
+    height: 50%;
 }
 #pokeRival{
-    position: fixed;
-    top: 370px;
-    left: 300px;
+    position: relative;
+    top: 12%;
+    left: 28%; 
+    height: 45%;
 }
 
 #poke-propio{
-    height: 20%;
-    width: 100%;
+    background-color: orange;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 15%; 
+    align-items: center;
+    margin-right: 1%;
 }
 
 #poke-rival{
-    height: 20%;
-    width: 100%;
+    background-color:rgba(242, 242, 242, 0.4);
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 15%; 
+    align-items: center;
+    margin-left: 1%;
+    border: 4px solid #d3d3d3;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
 }
+
+.stats {
+    background-color: rgba(40, 40, 40, 0.9);
+    border: 3px solid #6d6d6d;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Press Start 2P', sans-serif; 
+    text-align: left;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stats h3 {
+    color: #222;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.stats p {
+    margin: 5px 0;
+}
+
+.stats span {
+    font-weight: bold;
+}
+
+.stats .stat-bar {
+    width: 100%;
+    background-color: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 10px;
+    margin-top: 5px;
+}
+
+.stats .stat-bar-inner {
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
+.type {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.type.bug {background-color: #A6B91A; }
+.type.dark {background-color: #705746; }
+.type.dragon {background-color: #6F35FC; }
+.type.electric {background-color: #F7D02C; }
+.type.fairy {background-color: #D685AD; }
+.type.fighting {background-color: #C22E28; }
+.type.fire {background-color: #EE8130; }
+.type.flying {background-color: #A98FF3; }
+.type.ghost { background-color: #735797; }
+.type.grass { background-color: #7AC74C; }
+.type.ground { background-color: #E2BF65; }
+.type.ice { background-color: #96D9D6; }
+.type.normal { background-color: #A8A77A; }
+.type.poison { background-color: #A33EA1; }
+.type.psychic { background-color: #F95587; }
+.type.rock { background-color: #B6A136; }
+.type.steel { background-color: #B7B7CE; }
+.type.water { background-color: #6390F0; }

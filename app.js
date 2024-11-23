@@ -1,3 +1,5 @@
+//JavaScript
+
 //Atributos poke rival
 const imgRival = document.querySelector('#pokeRival'); //querySelectroAll('div')
 const nombreRival = document.querySelector('#nombreRival');
@@ -22,6 +24,8 @@ const defensaEspPropio = document.querySelector('#defensaEspPropio');
 const defensaFisPropio = document.querySelector('#defensaFisPropio');
 const velocidadPropio = document.querySelector('#velocidadPropio');
 
+imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
+
 //Interfaz de usuario
 
 const input = document.querySelector('#input');
@@ -40,20 +44,25 @@ const getNumRandom = () => {
 
 //Se elegirá un pokemon pero solo del tipo fantasma, el tipo de elección del pokemon queda a criterio del desarrollador, que sea divertido.
 const obtenerPokePropio = ()=>{
+    
     const num = input.value;
-
     console.log(num);
 
-    axios.get("https://pokeapi.co/api/v2/pokemon/${num}").then((res)=>{   // THEN si se cumple lo de antes
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`).then((res)=>{   // THEN si se cumple lo de antes
         console.log(res.data);
         return res.data
     }).then((res)=>{
-        //console.log(res);
+        console.log(res);
         imgPropio.src = res.sprites.back_default;
+        if(res.sprites.back_default==null){
+            imgPropio.src = res.sprites.front_default;
+        }
+        console.log('img:')
+        console.log(imgPropio.src)
         nombrePropio.innerHTML = res.name;
         tipo1Propio.innerHTML = res.types[0].type.name;
 
-        if(res.types[1].type.name == undefined){
+        if(res.types[1] == undefined){
             tipo2Propio.innerHTML = '';
         }else{
             tipo2Propio.innerHTML = res.types[1].type.name;
@@ -64,19 +73,20 @@ const obtenerPokePropio = ()=>{
         atkEspPropio.innerHTML = res.stats[3].base_stat;
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
+        console.log(res)
     })
 }
 //Se generará un pokemon rival aleatorio 
-const obtenerPokeRival = () =>{
+/*const obtenerPokeRival = () =>{
 
     const numPokeRival = getNumRandom();
     console.log(numPokeRival);
     
-    axios.get("https://pokeapi.co/api/v2/pokemon/${numPokeRival}").then((res)=>{
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`).then((res)=>{
         console.log(res.data);
         return res.data
     }).then((res)=>{
-        //console.log(res);
+        console.log(res);
         imgRival.src = res.sprites.front_default;
         nombreRival.innerHTML = res.name;
         tipo1Rival.innerHTML = res.types[0].type.name;
@@ -86,15 +96,57 @@ const obtenerPokeRival = () =>{
         }else{
             tipo2Rival.innerHTML = res.types[1].type.name;
         }
-
         vidaRival.innerHTML = res.stats[0].base_stat;
         atkFisRival.innerHTML = res.stats[1].base_stat;
         defensaFisRival.innerHTML = res.stats[2].base_stat;
         atkEspRival.innerHTML = res.stats[3].base_stat;
         defensaEspRival.innerHTML = res.stats[4].base_stat;
         velocidadRival.innerHTML = res.stats[5].base_stat;
+        console.log(res)
     })
-}
+}*/
+const obtenerPokeRival = () => {
+    const numPokeRival = getNumRandom();
+    console.log(numPokeRival);
+
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`).then((res) => {
+        console.log(res.data);
+        return res.data;
+    }).then((res) => {
+        console.log(res);
+
+        imgRival.src = res.sprites.front_default;
+
+        nombreRival.innerHTML = res.name;
+
+        tipo1Rival.innerHTML = `<span class="type ${res.types[0].type.name}">${res.types[0].type.name}</span>`;
+        if (res.types.length > 1) {
+            tipo2Rival.innerHTML = `<span class="type ${res.types[1].type.name}">${res.types[1].type.name}</span>`;
+        } else {
+            tipo2Rival.innerHTML = '';
+        }
+
+        // Stats
+        const maxStat = 255; // Maximum possible Pokémon stat value
+        vidaRival.innerHTML = res.stats[0].base_stat;
+        atkFisRival.innerHTML = res.stats[1].base_stat;
+        defensaFisRival.innerHTML = res.stats[2].base_stat;
+        atkEspRival.innerHTML = res.stats[3].base_stat;
+        defensaEspRival.innerHTML = res.stats[4].base_stat;
+        velocidadRival.innerHTML = res.stats[5].base_stat;
+
+        // Update stat bars dynamically
+        document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
+        document.querySelector("#ataqueFisRival .stat-bar-inner").style.width = `${(res.stats[1].base_stat / maxStat) * 100}%`;
+        document.querySelector("#defensaFisRival .stat-bar-inner").style.width = `${(res.stats[2].base_stat / maxStat) * 100}%`;
+        document.querySelector("#ataqueEspRival .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
+        document.querySelector("#defensaEspRival .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
+        document.querySelector("#velocidadRival .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
+    }).catch(err => {
+        console.error("Error fetching Pokémon data:", err);
+    });
+};
+
 //Combate, el pokemon perdedor será el que se le acabe primero su vida.
 //El usuario deberá elegir si ocupa ataque fisico o especial, según lo elegido los pokemon usarán su defensa especial o defensa fisica para bloquear los ataques
 //La defensa especial o fisica del pokemon que recibe el ataque sera restada del ataque especial o fisico del pokemon atacante, la diferencia será restada a la vida del pokemon defensor
@@ -107,11 +159,20 @@ const obtenerPokeRival = () =>{
 //poke2VidaRestante = poke2Vida - DañoRecibido;
 //Se turnarán los pokemon hasta que haya un ganador
 //Mostrar el ganador
+
+const updateStatBar = (elementId, value, maxValue) => {
+    const percentage = (value / maxValue) * 100;
+     document.querySelector(`#${elementId} .stat-bar-inner`).style.width = `${percentage}%`;
+ };
+ 
+ const applyTypeColors = (element, type) => {
+     element.className = `type ${type}`; // Add appropriate type class
+ };
+
 const combate = ()=>{
     console.log('Estan peleando');
     
 }
-
 
 window.addEventListener('load', obtenerPokeRival);
 
