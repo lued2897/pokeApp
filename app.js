@@ -44,7 +44,7 @@ const obtenerPokePropio = ()=>{
 
     console.log(num);
 
-    axios.get("https://pokeapi.co/api/v2/pokemon/${num}").then((res)=>{   // THEN si se cumple lo de antes
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`).then((res)=>{   // THEN si se cumple lo de antes
         console.log(res.data);
         return res.data
     }).then((res)=>{
@@ -64,6 +64,7 @@ const obtenerPokePropio = ()=>{
         atkEspPropio.innerHTML = res.stats[3].base_stat;
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
+        console.log(res)
     })
 }
 //Se generará un pokemon rival aleatorio 
@@ -72,7 +73,7 @@ const obtenerPokeRival = () =>{
     const numPokeRival = getNumRandom();
     console.log(numPokeRival);
     
-    axios.get("https://pokeapi.co/api/v2/pokemon/${numPokeRival}").then((res)=>{
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`).then((res)=>{
         console.log(res.data);
         return res.data
     }).then((res)=>{
