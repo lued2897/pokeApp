@@ -22,6 +22,8 @@ const defensaEspPropio = document.querySelector('#defensaEspPropio');
 const defensaFisPropio = document.querySelector('#defensaFisPropio');
 const velocidadPropio = document.querySelector('#velocidadPropio');
 
+imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
+
 //Interfaz de usuario
 
 const input = document.querySelector('#input');
@@ -50,10 +52,15 @@ const obtenerPokePropio = ()=>{
     }).then((res)=>{
         //console.log(res);
         imgPropio.src = res.sprites.back_default;
+        if(res.sprites.back_default==null){
+            imgPropio.src = res.sprites.front_default;
+        }
+        console.log('img:')
+        console.log(imgPropio.src)
         nombrePropio.innerHTML = res.name;
         tipo1Propio.innerHTML = res.types[0].type.name;
 
-        if(res.types[1].type.name == undefined){
+        if(res.types[1] == undefined){
             tipo2Propio.innerHTML = '';
         }else{
             tipo2Propio.innerHTML = res.types[1].type.name;
