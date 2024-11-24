@@ -1,10 +1,16 @@
 /*css*/
+@font-face {
+    font-family: 'miFuente';
+    src: url('PokemonClassic.ttf') format('truetype');
+}
 
 body{
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
+    font-family: 'miFuente', sans-serif ;
+    font-size: 0.8em;
 }
 
 
@@ -52,13 +58,16 @@ body{
 }
 
 #poke-propio{
-    background-color: orange;
+    background-color: rgba(242, 242, 242, 0.4);
     display: flex;
     flex-flow: column;
     height: 100%;
     width: 15%; 
     align-items: center;
     margin-right: 1%;
+    border: 4px solid #d3d3d3;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
 }
 
 #poke-rival{
@@ -79,9 +88,10 @@ body{
     border: 3px solid #6d6d6d;
     border-radius: 10px;
     padding: 10px;
-    font-family: 'Press Start 2P', sans-serif; 
+    /*font-family: 'Press Start 2P', sans-serif; */
     text-align: left;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 0.88em; 
 }
 
 .stats h3 {
@@ -124,7 +134,32 @@ body{
     font-weight: bold;
 }
 
-.type.bug {background-color: #A6B91A; }
+.stats img {
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.poke-tipos img {
+    width: 35%; /* En lugar de 40px */
+    height: auto; /* Mantiene la proporción */
+    margin: 2% 0; /* En lugar de 5px */
+    vertical-align: middle;
+    min-width: 30px; /* Asegura un tamaño mínimo */
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.poke-tipos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 3%;
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    align-items: center;
+}
+
+
+/*.type.bug {background-color: #A6B91A; }
 .type.dark {background-color: #705746; }
 .type.dragon {background-color: #6F35FC; }
 .type.electric {background-color: #F7D02C; }
@@ -141,4 +176,4 @@ body{
 .type.psychic { background-color: #F95587; }
 .type.rock { background-color: #B6A136; }
 .type.steel { background-color: #B7B7CE; }
-.type.water { background-color: #6390F0; }
+.type.water { background-color: #6390F0; }*/

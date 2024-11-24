@@ -24,6 +24,8 @@ const defensaEspPropio = document.querySelector('#defensaEspPropio');
 const defensaFisPropio = document.querySelector('#defensaFisPropio');
 const velocidadPropio = document.querySelector('#velocidadPropio');
 
+
+
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
 //Interfaz de usuario
@@ -60,22 +62,40 @@ const obtenerPokePropio = ()=>{
         console.log('img:')
         console.log(imgPropio.src)
         nombrePropio.innerHTML = res.name;
-        tipo1Propio.innerHTML = res.types[0].type.name;
+
+        const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
+        tipoSpritesContainer.innerHTML = '';
+
+        /*tipo1Propio.innerHTML = res.types[0].type.name;
 
         if(res.types[1] == undefined){
             tipo2Propio.innerHTML = '';
         }else{
             tipo2Propio.innerHTML = res.types[1].type.name;
-        }
+        }*/
         vidaPropio.innerHTML = res.stats[0].base_stat;
         atkFisPropio.innerHTML = res.stats[1].base_stat;
         defensaFisPropio.innerHTML = res.stats[2].base_stat;
         atkEspPropio.innerHTML = res.stats[3].base_stat;
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
-        console.log(res)
-    })
-}
+        
+        res.types.forEach(typeInfo => {
+            axios.get(typeInfo.type.url).then(typeRes => {
+                const typeData = typeRes.data;
+                const typeSpriteUrl = typeData.sprites['generation-vi']['omega-ruby-alpha-sapphire'].name_icon;
+                const imgElement = document.createElement('img');
+                imgElement.src = typeSpriteUrl;
+                imgElement.alt = typeInfo.type.name;
+                document.getElementById('tipoPropioSprite').appendChild(imgElement);
+            }).catch(err => {
+                console.error("Error fetching type data:", err);
+            });
+        });
+    }).catch((error) => {
+        console.error('Error al obtener el Pokémon:', error);
+    });
+};
 //Se generará un pokemon rival aleatorio 
 /*const obtenerPokeRival = () =>{
 
@@ -118,13 +138,15 @@ const obtenerPokeRival = () => {
         imgRival.src = res.sprites.front_default;
 
         nombreRival.innerHTML = res.name;
-
-        tipo1Rival.innerHTML = `<span class="type ${res.types[0].type.name}">${res.types[0].type.name}</span>`;
+        
+        const tipoSpritesContainer2 = document.getElementById('tipoRivalSprite');
+        tipoSpritesContainer2.innerHTML = '';
+        /*tipo1Rival.innerHTML = `<span class="type ${res.types[0].type.name}">${res.types[0].type.name}</span>`;
         if (res.types.length > 1) {
             tipo2Rival.innerHTML = `<span class="type ${res.types[1].type.name}">${res.types[1].type.name}</span>`;
         } else {
             tipo2Rival.innerHTML = '';
-        }
+        }*/
 
         // Stats
         const maxStat = 255; // Maximum possible Pokémon stat value
@@ -142,6 +164,19 @@ const obtenerPokeRival = () => {
         document.querySelector("#ataqueEspRival .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaEspRival .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
         document.querySelector("#velocidadRival .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
+    
+        res.types.forEach(typeInfo => {
+            axios.get(typeInfo.type.url).then(typeRes => {
+                const typeData = typeRes.data;
+                const typeSpriteUrl = typeData.sprites['generation-vi']['omega-ruby-alpha-sapphire'].name_icon; 
+                const imgElement = document.createElement('img');
+                imgElement.src = typeSpriteUrl;
+                imgElement.alt = typeInfo.type.name;
+                document.getElementById('tipoRivalSprite').appendChild(imgElement);
+            }).catch(err => {
+                console.error("Error fetching type data:", err);
+            });
+        });
     }).catch(err => {
         console.error("Error fetching Pokémon data:", err);
     });
@@ -189,6 +224,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     console.log('Fondo aplicado correctamente');
     
 })
+
 
 window.addEventListener('load', obtenerPokeRival);
 
