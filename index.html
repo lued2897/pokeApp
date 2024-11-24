@@ -14,13 +14,12 @@
 <section class="GameArea">
     
     <div class="stats" id="poke-propio">
-        <h3 id="nombrePropio"></h3>
-        <!-- div id="tipoPropio" class="poke-tipos"></div> -->
-        <!--<p id="tipo1Propio" ></p>-->
-        <!--<p id="tipo2Propio" ></p>-->
+
+        <h3 id="nombrePropioStats"></h3>
+
         <div id="tipoPropioSprite" class="poke-tipos"></div>
-        <p>HP: <span id="vidaPropio"></span></p>
-        <div id="vidaPropio" class="stat-bar">
+        <p>HP: <span id="vidaPropioStats"></span></p>
+        <div id="vidaPropioStats" class="stat-bar">
             <div class="stat-bar-inner" style="background-color: #f00;"></div>
         </div>
 
@@ -51,18 +50,38 @@
     </div>
     
     <div class="arena" id="arena">
+        <div class="poke-info rival-info">
+            <span id="nombreRival"></span>
+            <p>HP <span id="vidaRival"></span></p>
+            <div id="vidaRival" class="stat-bar">
+                <div class="stat-bar-inner" style="background-color: #f00;"></div>
+            </div>
+        </div>
+
         <img id="pokePropio" src="" alt="">
         <img id="pokeRival" src="" alt="">
+
+        <div class="poke-info propio-info">
+            <span id="nombrePropio"></span>
+            <p>HP <span id="vidaPropio"></span></p>
+            <div id="vidaPropio" class="stat-bar">
+                <div class="stat-bar-inner" style="background-color: #f00;"></div>
+            </div>
+        </div>
+        
+        <div class="caja-inf" id="infBox">
+            <p id="dialogTxt">Wild <span id="nombreRivalTxt"></span> appeared!</p>
+        </div>
+
     </div>
 
+
     <div class="stats" id="poke-rival">
-        <h3 id="nombreRival"></h3>
-        <!--<div id="tipoRival" class="poke-tipos"></div>
-        <p id="tipo1Rival"></p>
-        <p id="tipo2Rival"></p>-->
+        <span><h3 id="nombreRivalStats"></h3></span>
+
         <div id="tipoRivalSprite" class="poke-tipos"></div>
-        <p>HP: <span id="vidaRival"></span></p>
-        <div id="vidaRival" class="stat-bar">
+        <p>HP: <span id="vidaRivalStats"></span></p>
+        <div id="vidaRivalStats" class="stat-bar">
             <div class="stat-bar-inner" style="background-color: #f00;"></div>
         </div>
         <p>Ataque: <span id="ataqueFisRival"></span></p>
@@ -89,6 +108,8 @@
 
 </section>    
 
+
+
 <div id="UI">
     <input id="input" max="1000" type="number">
     <button id="btn-poke">Elegir poke</button>
@@ -96,5 +117,7 @@
     <button id="btn-atk-esp">Ataque Especial</button>
 </div>
 <script src="./app.js"></script>   
+
+
 </body>
 </html>

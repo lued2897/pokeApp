@@ -3,11 +3,15 @@
 //Atributos poke rival
 const imgRival = document.querySelector('#pokeRival'); //querySelectroAll('div')
 const nombreRival = document.querySelector('#nombreRival');
+const nombreRivalStats = document.querySelector('#nombreRivalStats');
+const nombreRivalTxt = document.querySelector('#nombreRivalTxt');
+
 const tipo1Rival = document.querySelector('#tipo1Rival');
 const tipo2Rival = document.querySelector('#tipo2Rival');
 const atkFisRival = document.querySelector('#ataqueFisRival'); 
 const atkEspRival = document.querySelector('#ataqueEspRival');
 const vidaRival = document.querySelector('#vidaRival');
+const vidaRivalStats = document.querySelector('#vidaRivalStats')
 const defensaEspRival = document.querySelector('#defensaEspRival');
 const defensaFisRival = document.querySelector('#defensaFisRival');
 const velocidadRival = document.querySelector('#velocidadRival');
@@ -15,16 +19,19 @@ const velocidadRival = document.querySelector('#velocidadRival');
 //Atributos poke propio
 const imgPropio = document.querySelector('#pokePropio'); //querySelectroAll('div')
 const nombrePropio = document.querySelector('#nombrePropio');
+const nombrePropioStats = document.querySelector('#nombrePropioStats');
+
 const tipo1Propio = document.querySelector('#tipo1Propio');
 const tipo2Propio = document.querySelector('#tipo2Propio');
 const atkFisPropio = document.querySelector('#ataqueFisPropio'); 
 const atkEspPropio = document.querySelector('#ataqueEspPropio');
 const vidaPropio = document.querySelector('#vidaPropio');
+const vidaPropioStats = document.querySelector('#vidaPropioStats');
 const defensaEspPropio = document.querySelector('#defensaEspPropio');
 const defensaFisPropio = document.querySelector('#defensaFisPropio');
 const velocidadPropio = document.querySelector('#velocidadPropio');
 
-
+const maxStat = 255; 
 
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
@@ -61,29 +68,33 @@ const obtenerPokePropio = ()=>{
         }
         console.log('img:')
         console.log(imgPropio.src)
-        nombrePropio.innerHTML = res.name;
+        nombrePropio.innerHTML = res.name.toUpperCase();
+        nombrePropioStats.innerHTML = res.name.toUpperCase();
 
         const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
         tipoSpritesContainer.innerHTML = '';
 
-        /*tipo1Propio.innerHTML = res.types[0].type.name;
-
-        if(res.types[1] == undefined){
-            tipo2Propio.innerHTML = '';
-        }else{
-            tipo2Propio.innerHTML = res.types[1].type.name;
-        }*/
         vidaPropio.innerHTML = res.stats[0].base_stat;
+        vidaPropioStats.innerHTML = res.stats[0].base_stat;
         atkFisPropio.innerHTML = res.stats[1].base_stat;
         defensaFisPropio.innerHTML = res.stats[2].base_stat;
         atkEspPropio.innerHTML = res.stats[3].base_stat;
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
         
+        document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
+        document.querySelector("#vidaPropioStats .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
+        document.querySelector("#ataqueFisPropio .stat-bar-inner").style.width = `${(res.stats[1].base_stat / maxStat) * 100}%`;
+        document.querySelector("#defensaFisPropio .stat-bar-inner").style.width = `${(res.stats[2].base_stat / maxStat) * 100}%`;
+        document.querySelector("#ataqueEspPropio .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
+        document.querySelector("#defensaEspPropio .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
+        document.querySelector("#velocidadPropio .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
+    
+
         res.types.forEach(typeInfo => {
             axios.get(typeInfo.type.url).then(typeRes => {
                 const typeData = typeRes.data;
-                const typeSpriteUrl = typeData.sprites['generation-vi']['omega-ruby-alpha-sapphire'].name_icon;
+                const typeSpriteUrl = typeData.sprites['generation-vi']['omega-ruby-alpha-sapphire'].name_icon; 
                 const imgElement = document.createElement('img');
                 imgElement.src = typeSpriteUrl;
                 imgElement.alt = typeInfo.type.name;
@@ -136,21 +147,20 @@ const obtenerPokeRival = () => {
         console.log(res);
 
         imgRival.src = res.sprites.front_default;
-
-        nombreRival.innerHTML = res.name;
+        
+        
+        nombreRival.innerHTML = res.name.toUpperCase();;
+        nombreRivalStats.innerHTML = res.name.toUpperCase();;
+        nombreRivalTxt.innerHTML = res.name;
         
         const tipoSpritesContainer2 = document.getElementById('tipoRivalSprite');
         tipoSpritesContainer2.innerHTML = '';
-        /*tipo1Rival.innerHTML = `<span class="type ${res.types[0].type.name}">${res.types[0].type.name}</span>`;
-        if (res.types.length > 1) {
-            tipo2Rival.innerHTML = `<span class="type ${res.types[1].type.name}">${res.types[1].type.name}</span>`;
-        } else {
-            tipo2Rival.innerHTML = '';
-        }*/
+
 
         // Stats
-        const maxStat = 255; // Maximum possible Pokémon stat value
+        //const maxStat = 255; // Maximum possible Pokémon stat value
         vidaRival.innerHTML = res.stats[0].base_stat;
+        vidaRivalStats.innerHTML = res.stats[0].base_stat;
         atkFisRival.innerHTML = res.stats[1].base_stat;
         defensaFisRival.innerHTML = res.stats[2].base_stat;
         atkEspRival.innerHTML = res.stats[3].base_stat;
@@ -159,6 +169,7 @@ const obtenerPokeRival = () => {
 
         // Update stat bars dynamically
         document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
+        document.querySelector("#vidaRivalStats .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
         document.querySelector("#ataqueFisRival .stat-bar-inner").style.width = `${(res.stats[1].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaFisRival .stat-bar-inner").style.width = `${(res.stats[2].base_stat / maxStat) * 100}%`;
         document.querySelector("#ataqueEspRival .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
@@ -212,7 +223,7 @@ const combate = ()=>{
 document.addEventListener('DOMContentLoaded', ()=> {
 
     function elegirFondoAleatorio() {
-        const indice = Math.floor(Math.random()*7);
+        const indice = Math.floor(Math.random()*8);
         const rutaFondo = `./BGS/battlebg_${indice + 1}.png`; // Generar ruta
         return rutaFondo;
     }
@@ -221,6 +232,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     
     const nuevoFondo = elegirFondoAleatorio();
     arena.style.backgroundImage = `url('${nuevoFondo}')`; // Cambiar fondo
+    //arena.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('${nuevoFondo}')`;
     console.log('Fondo aplicado correctamente');
     
 })
