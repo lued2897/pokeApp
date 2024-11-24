@@ -174,6 +174,22 @@ const combate = ()=>{
     
 }
 
+document.addEventListener('DOMContentLoaded', ()=> {
+
+    function elegirFondoAleatorio() {
+        const indice = Math.floor(Math.random()*7);
+        const rutaFondo = `./BGS/battlebg_${indice + 1}.png`; // Generar ruta
+        return rutaFondo;
+    }
+
+    const arena = document.getElementById('arena');
+    
+    const nuevoFondo = elegirFondoAleatorio();
+    arena.style.backgroundImage = `url('${nuevoFondo}')`; // Cambiar fondo
+    console.log('Fondo aplicado correctamente');
+    
+})
+
 window.addEventListener('load', obtenerPokeRival);
 
 btnElegir.addEventListener('click', obtenerPokePropio);

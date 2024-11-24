@@ -30,7 +30,7 @@ body{
 #arena{
     width: 65.7vh;
     height: 37vh;
-    background-image: url('./fondo.png');
+    /*background-image: url('./fondo.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
