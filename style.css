@@ -378,7 +378,12 @@ color: #ffffff; /* Color del texto */
     white-space: nowrap;
 }
 
-
+/*
+Para ocultar el botón al inicio 
+*/
+#btn-iniciar-combate{
+    display: none;
+}
 
 
 
