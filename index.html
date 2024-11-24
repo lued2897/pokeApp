@@ -16,6 +16,7 @@
     <div class="stats" id="poke-propio">
 
         <h3 id="nombrePropioStats"></h3>
+        <p>NO. <span id="propio-num"></span></p>
 
         <div id="tipoPropioSprite" class="poke-tipos"></div>
         <p>HP: <span id="vidaPropioStats"></span></p>
@@ -49,12 +50,16 @@
         </div>
     </div>
     
+
+    <!-- TODO LO QUE APARECE DENTRO DE LA ARENA-->
     <div class="arena" id="arena">
         <div class="poke-info rival-info">
             <span id="nombreRival"></span>
-            <p>HP <span id="vidaRival"></span></p>
-            <div id="vidaRival" class="stat-bar">
-                <div class="stat-bar-inner" style="background-color: #f00;"></div>
+            <div class="hp-container">
+                <p>HP <span id="vidaRival"></span></p>
+                <div id="vidaRival" class="stat-bar">
+                    <div class="stat-bar-inner" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
 
@@ -63,9 +68,12 @@
 
         <div class="poke-info propio-info">
             <span id="nombrePropio"></span>
-            <p>HP <span id="vidaPropio"></span></p>
-            <div id="vidaPropio" class="stat-bar">
-                <div class="stat-bar-inner" style="background-color: #f00;"></div>
+
+            <div class="hp-container">
+                <p>HP <span id="vidaPropio"></span></p>
+                <div id="vidaPropio" class="stat-bar">
+                    <div class="stat-bar-inner" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
         
@@ -78,6 +86,7 @@
 
     <div class="stats" id="poke-rival">
         <span><h3 id="nombreRivalStats"></h3></span>
+        <p>NO. <span id="rival-num"></span></p>
 
         <div id="tipoRivalSprite" class="poke-tipos"></div>
         <p>HP: <span id="vidaRivalStats"></span></p>

@@ -5,6 +5,7 @@ const imgRival = document.querySelector('#pokeRival'); //querySelectroAll('div')
 const nombreRival = document.querySelector('#nombreRival');
 const nombreRivalStats = document.querySelector('#nombreRivalStats');
 const nombreRivalTxt = document.querySelector('#nombreRivalTxt');
+const idRival = document.querySelector('#rival-num');
 
 const tipo1Rival = document.querySelector('#tipo1Rival');
 const tipo2Rival = document.querySelector('#tipo2Rival');
@@ -20,6 +21,8 @@ const velocidadRival = document.querySelector('#velocidadRival');
 const imgPropio = document.querySelector('#pokePropio'); //querySelectroAll('div')
 const nombrePropio = document.querySelector('#nombrePropio');
 const nombrePropioStats = document.querySelector('#nombrePropioStats');
+const idPropio = document.querySelector('#propio-num');
+
 
 const tipo1Propio = document.querySelector('#tipo1Propio');
 const tipo2Propio = document.querySelector('#tipo2Propio');
@@ -74,6 +77,8 @@ const obtenerPokePropio = ()=>{
         const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
         tipoSpritesContainer.innerHTML = '';
 
+        idPropio.textContent = res.id;
+
         vidaPropio.innerHTML = res.stats[0].base_stat;
         vidaPropioStats.innerHTML = res.stats[0].base_stat;
         atkFisPropio.innerHTML = res.stats[1].base_stat;
@@ -82,6 +87,8 @@ const obtenerPokePropio = ()=>{
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
         
+
+
         document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
         document.querySelector("#vidaPropioStats .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
         document.querySelector("#ataqueFisPropio .stat-bar-inner").style.width = `${(res.stats[1].base_stat / maxStat) * 100}%`;
@@ -147,7 +154,7 @@ const obtenerPokeRival = () => {
         console.log(res);
 
         imgRival.src = res.sprites.front_default;
-        
+        idRival.textContent = res.id;
         
         nombreRival.innerHTML = res.name.toUpperCase();;
         nombreRivalStats.innerHTML = res.name.toUpperCase();;
@@ -240,6 +247,43 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
 window.addEventListener('load', obtenerPokeRival);
 
-btnElegir.addEventListener('click', obtenerPokePropio);
+function showError(message) {
+    // Eliminar mensaje de error anterior si existe
+    const existingError = document.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+  
+    // Crear nuevo mensaje de error
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.querySelector('#UI').appendChild(errorDiv);
+  
+    // Eliminar mensaje después de 3 segundos
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 3000);
+  }
+  
+  input.addEventListener('input', (e) => {
+    // Eliminar cualquier carácter que no sea número
+    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+  
+    const num = parseInt(e.target.value);
+  
+    if (num > 1025) {
+        showError('¡El número debe ser menor o igual a 1025!');
+        e.target.value = '1025';
+    }
+  });
+  
+  btnElegir.addEventListener('click', () => {
+    if (!input.value) {
+        showError('¡Solo se aceptan números!');
+        return;
+    }
+    obtenerPokePropio();
+  });
 
 btnAtkFis.addEventListener('click',combate);
