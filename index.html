@@ -1,52 +1,133 @@
+<!--html--> 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio JS</title>
+    <title>Poke APP</title>
     <link rel="stylesheet" href="./style.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 </head>
 <body>
 <section class="GameArea">
     
     <div class="stats" id="poke-propio">
-        <h3 id="nombrePropio"></h3>
-        <p id="tipo1Propio"></p>
-        <p id="tipo2Propio"></p>
-        <p>Vida: <span id="vidaPropio"></span></p>
+
+        <h3 id="nombrePropioStats"></h3>
+        <p>NO. <span id="propio-num"></span></p>
+
+        <div id="tipoPropioSprite" class="poke-tipos"></div>
+        <p>HP: <span id="vidaPropioStats"></span></p>
+        <div id="vidaPropioStats" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #f00;"></div>
+        </div>
+
         <p>Ataque: <span id="ataqueFisPropio"></span></p>
+        <div id="ataqueFisPropio" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #f80;"></div>
+        </div>
+
         <p>Ataque Especial: <span id="ataqueEspPropio"></span></p>
+        <div id="ataqueEspPropio" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #ff0;"></div>
+        </div>
+
         <p>Defensa Especial: <span id="defensaEspPropio"></span></p>
+        <div id="defensaEspPropio" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #08f;"></div>
+        </div>
+        
         <p>Defensa Fisica: <span id="defensaFisPropio"></span></p>
+        <div id="defensaFisPropio" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #80f;"></div>
+        </div>
+        
         <p>Velocidad: <span id="velocidadPropio"></span></p>
+        <div id="velocidadPropio" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #0f0;"></div>
+        </div>
     </div>
     
+
+    <!-- TODO LO QUE APARECE DENTRO DE LA ARENA-->
     <div class="arena" id="arena">
+        <div class="poke-info rival-info">
+            <span id="nombreRival"></span>
+            <div class="hp-container">
+                <p>HP <span id="vidaRival"></span></p>
+                <div id="vidaRival" class="stat-bar">
+                    <div class="stat-bar-inner" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
         <img id="pokePropio" src="" alt="">
         <img id="pokeRival" src="" alt="">
+
+        <div class="poke-info propio-info">
+            <span id="nombrePropio"></span>
+
+            <div class="hp-container">
+                <p>HP <span id="vidaPropio"></span></p>
+                <div id="vidaPropio" class="stat-bar">
+                    <div class="stat-bar-inner" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="caja-inf" id="infBox">
+            <p id="dialogTxt">Wild <span id="nombreRivalTxt"></span> appeared!</p>
+        </div>
+
     </div>
+
 
     <div class="stats" id="poke-rival">
-        <h3 id="nombreRival"></h3>
-        <p id="tipo1Rival"></p>
-        <p id="tipo2Rival"></p>
-        <p>Vida: <span id="vidaRival"></span></p>
+        <span><h3 id="nombreRivalStats"></h3></span>
+        <p>NO. <span id="rival-num"></span></p>
+
+        <div id="tipoRivalSprite" class="poke-tipos"></div>
+        <p>HP: <span id="vidaRivalStats"></span></p>
+        <div id="vidaRivalStats" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #f00;"></div>
+        </div>
         <p>Ataque: <span id="ataqueFisRival"></span></p>
+        <div id="ataqueFisRival" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #f80;"></div>
+        </div>
         <p>Ataque Especial: <span id="ataqueEspRival"></span></p>
+        <div id="ataqueEspRival" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: rgb(255, 0, 195);"></div>
+        </div>
         <p>Defensa Especial: <span id="defensaEspRival"></span></p>
+        <div id="defensaEspRival" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #08f;"></div>
+        </div>
         <p>Defensa Fisica: <span id="defensaFisRival"></span></p>
+        <div id="defensaFisRival" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #80f;"></div>
+        </div>
         <p>Velocidad: <span id="velocidadRival"></span></p>
+        <div id="velocidadRival" class="stat-bar">
+            <div class="stat-bar-inner" style="background-color: #0f0;"></div>
+        </div>
     </div>
 
-    
 </section>    
+
+
+
 <div id="UI">
     <input id="input" max="1000" type="number">
     <button id="btn-poke">Elegir poke</button>
     <button id="btn-atk-fis">Ataque Fisico</button>
     <button id="btn-atk-esp">Ataque Especial</button>
+    <button id="btn-iniciar-combate">INICIAR COMBATE</button>
 </div>
 <script src="./app.js"></script>   
+
+
 </body>
 </html>
