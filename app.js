@@ -38,6 +38,8 @@ const maxStat = 255;
 
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
+// Referencia al elemento donde aparecerán los mensajes
+const dialogTxt = document.querySelector('#dialogTxt');
 let jsonData
 async function loadJSON() {
     try {
@@ -85,7 +87,7 @@ const btnElegir = document.querySelector('#btn-poke');
 const btnAtkFis  = document.querySelector('#btn-atk-fis');
 const btnAtkEsp  = document.querySelector('#btn-atk-esp');
 const btnCombate = document.querySelector('#btn-iniciar-combate');
-//const btnCombate =
+const btnJugarDeNuevo = document.querySelector('#btn-jugar-de-nuevo');
 
 //Método de número random
 const getNumRandom = () => {
@@ -106,6 +108,10 @@ const obtenerPokePropio = ()=>{
         return res.data
     }).then((res)=>{
         console.log(res);
+
+        const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
+        tipoSpritesContainer.innerHTML = '';
+
         imgPropio.src = res.sprites.back_default;
         if(res.sprites.back_default==null){
             imgPropio.src = res.sprites.front_default;
@@ -123,11 +129,9 @@ const obtenerPokePropio = ()=>{
 
         console.log('img:')
         console.log(imgPropio.src)
+
         nombrePropio.innerHTML = res.name.toUpperCase();
         nombrePropioStats.innerHTML = res.name.toUpperCase();
-
-        const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
-        tipoSpritesContainer.innerHTML = '';
 
         idPropio.textContent = res.id;
 
@@ -154,7 +158,6 @@ const obtenerPokePropio = ()=>{
         document.querySelector("#ataqueEspPropio .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaEspPropio .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
         document.querySelector("#velocidadPropio .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
-    
 
         res.types.forEach(typeInfo => {
             axios.get(typeInfo.type.url).then(typeRes => {
@@ -163,7 +166,12 @@ const obtenerPokePropio = ()=>{
                 const imgElement = document.createElement('img');
                 imgElement.src = typeSpriteUrl;
                 imgElement.alt = typeInfo.type.name;
-                document.getElementById('tipoPropioSprite').appendChild(imgElement);
+                if (!tipoSpritesContainer.querySelector(`[alt="${typeInfo}"]`)) {
+                    if (!tipoSpritesContainer.querySelector(`[alt="${typeInfo.type.name}"]`)) {
+                        tipoSpritesContainer.appendChild(imgElement);
+                    }
+                }
+                //document.getElementById('tipoPropioSprite').appendChild(imgElement);
             }).catch(err => {
                 console.error("Error fetching type data:", err);
             });
@@ -259,7 +267,9 @@ const obtenerPokeRival = () => {
         document.querySelector("#ataqueEspRival .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaEspRival .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
         document.querySelector("#velocidadRival .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
-    
+        
+        
+
         res.types.forEach(typeInfo => {
             axios.get(typeInfo.type.url).then(typeRes => {
                 const typeData = typeRes.data;
@@ -361,29 +371,41 @@ const rivalAtaque = () => {
         
         vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 1)*mult;
         console.log('Vida del propio después del ataque físico: ', vidaPropioNum);
+        actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque fisico');
     } else {
         // Ataque especial del rival
         vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 1)*mult;
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
+        actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque especial');
     }
-
-    // Verificar si el propio Pokémon ha perdido
-    if (vidaPropioNum <= 0) {
-        if(vidaPropioNum < 0){
-            vidaPropioNum=0;
+    setTimeout(() => {
+        console.log('Espera ataque rival');
+        // Verificar si el propio Pokémon ha perdido
+        if (vidaPropioNum <= 0) {
+            if(vidaPropioNum < 0){
+                vidaPropioNum=0;
+            }
+            console.log('¡El Pokémon propio ha perdido!');
+            actualizarValores();
+            jugarDeNuevo();
+            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' te ha derrotado');
+            btnAtkFis.style.display = 'none'
+            btnAtkEsp.style.display = 'none'
+            return; // Termina el juego
         }
-        console.log('¡El Pokémon propio ha perdido!');
+
+        // Actualizar valores en la interfaz
         actualizarValores();
-        return; // Termina el juego
-    }
 
-    // Actualizar valores en la interfaz
-    actualizarValores();
-
-    // Habilitar botones de ataque del jugador para su turno
-    btnAtkFis.disabled = false;
-    btnAtkEsp.disabled = false;
-    propioAtaque();
+        // Habilitar botones de ataque del jugador para su turno
+        btnAtkFis.disabled = false;
+        btnAtkEsp.disabled = false;
+        actualizarMensaje('Tú turno');
+        setTimeout(() => {
+            console.log('Espera mi turno');
+            propioAtaque();
+        }, 1000);
+    }, 2000);
 };
 
 // Función que gestiona el ataque del jugador
@@ -395,20 +417,31 @@ const propioAtaque = () => {
         //console.log('ATAQUE MULTIPLICADOR',mult)
         vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 1)*mult;
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
-
-        // Verificar si el rival ha perdido
-        if (vidaRivalNum <= 0) {
-            if(vidaRivalNum < 0){
-                vidaRivalNum=0;
+        actualizarMensaje(nombrePropio.textContent+' realiza ataque fisico');
+        setTimeout(() => {
+            console.log('Espera ataque mio');
+            // Verificar si el rival ha perdido
+            if (vidaRivalNum <= 0) {
+                if(vidaRivalNum < 0){
+                    vidaRivalNum=0;
+                }
+                console.log('¡El Pokémon rival ha perdido!');
+                actualizarValores();
+                jugarDeNuevo();
+                actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
+                btnAtkFis.style.display = 'none'
+                btnAtkEsp.style.display = 'none'
+                return; // Termina el juego
             }
-            console.log('¡El Pokémon rival ha perdido!');
-            actualizarValores();
-            return; // Termina el juego
-        }
 
-        // Actualizar valores y pasar el turno al rival
-        actualizarValores();
-        rivalAtaque();
+            // Actualizar valores y pasar el turno al rival
+            actualizarValores();
+            actualizarMensaje('Turno del Rival');
+            setTimeout(() => {
+                console.log('Espera turno rival');
+                rivalAtaque();
+            }, 1000);
+        }, 2000);
     }, { once: true }); // Agregar el listener solo una vez
 
     // Agregar un único listener para el ataque especial
@@ -417,20 +450,31 @@ const propioAtaque = () => {
         let mult=multiplicador(tipo1Propio,tipo2Propio,tipo1Rival,tipo2Rival)
         vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 1)*mult;
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
-
-        // Verificar si el rival ha perdido
-        if (vidaRivalNum <= 0) {
-            if(vidaRivalNum < 0){
-                vidaRivalNum=0;
+        actualizarMensaje(nombrePropio.textContent+' realiza ataque especial');
+        setTimeout(() => {
+            console.log('Espera ataque esp mio');
+            // Verificar si el rival ha perdido
+            if (vidaRivalNum <= 0) {
+                if(vidaRivalNum < 0){
+                    vidaRivalNum=0;
+                }
+                console.log('¡El Pokémon rival ha perdido!');
+                actualizarValores();
+                jugarDeNuevo();
+                actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
+                btnAtkFis.style.display = 'none'
+                btnAtkEsp.style.display = 'none'
+                return; // Termina el juego
             }
-            console.log('¡El Pokémon rival ha perdido!');
-            actualizarValores();
-            return; // Termina el juego
-        }
 
-        // Actualizar valores y pasar el turno al rival
-        actualizarValores();
-        rivalAtaque();
+            // Actualizar valores y pasar el turno al rival
+            actualizarValores();
+            actualizarMensaje('Turno del Rival');
+            setTimeout(() => {
+                console.log('Espera turno rival');
+                rivalAtaque();
+            }, 1000);
+        }, 2000);
     }, { once: true }); // Agregar el listener solo una vez
 };
 
@@ -455,11 +499,14 @@ const actualizarValores = () => {
 
 const combate = () => {
     const turno = primerTurno();  // Determina el primer turno
-    if (turno === 1) { // Si el primer turno es del jugador, comienza su ataque
-        propioAtaque();
-    } else { // Si el primer turno es del rival, comienza su ataque
-        rivalAtaque();
-    }
+    setTimeout(() => {
+        console.log('Espera primer turno');
+        if (turno === 1) { // Si el primer turno es del jugador, comienza su ataque
+            propioAtaque();
+        } else { // Si el primer turno es del rival, comienza su ataque
+            rivalAtaque();
+        }
+    }, 1000);
 };
 
 function multiplicador( tipoAtaca, tipo2Ataca, tipoDefiende, tipo2Defiende){
@@ -485,12 +532,29 @@ function multiplicador( tipoAtaca, tipo2Ataca, tipoDefiende, tipo2Defiende){
 const primerTurno = () => {
     if ((velocidadPropioNum-velocidadRivalNum>=0)) {
         console.log(velocidadPropioNum-velocidadRivalNum);
+        actualizarMensaje('Inicias tú');
         return 1;
     } else {
         console.log(velocidadPropioNum-velocidadRivalNum);
+        actualizarMensaje('Inicia el rival');
         return 0;
     }
 };  
+
+const jugarDeNuevo = () => {
+    // Asegurar que el botón se muestre correctamente
+    btnJugarDeNuevo.style.display = 'block';
+
+    // Agregar el evento para recargar la página al hacer clic
+    btnJugarDeNuevo.addEventListener('click', function () {
+        location.reload(); // Recarga la página
+    }, { once: true }); // Aseguramos que solo se ejecute una vez
+};
+
+
+const actualizarMensaje = (mensaje) => {
+    dialogTxt.textContent = mensaje; // Cambia el contenido del texto
+};
 
 window.addEventListener('load', obtenerPokeRival);
 window.addEventListener('load', () => {
@@ -507,4 +571,27 @@ btnCombate.addEventListener('click', () => {
     btnCombate.style.display = 'none';
     input.style.display = 'none';
     btnElegir.style.display = 'none';
+    btnAtkFis.style.display = 'block'
+    btnAtkEsp.style.display = 'block'
+});
+
+document.getElementById('btn-poke').addEventListener('click', function () {
+    const inputElement = document.getElementById('input');
+    const inputValue = inputElement.value.trim();
+    const errorMsg = document.getElementById('error-msg');
+    const btnIniciarCombate = document.getElementById('btn-iniciar-combate');
+
+    // Validar que el input sea un número entre 1 y 1025
+    if (!inputValue || isNaN(inputValue) || inputValue < 1 || inputValue > 1025) {
+        errorMsg.textContent = "Por favor, ingresa un número válido entre 1 y 1025.";
+        btnIniciarCombate.style.display = "none"; // Asegurarse de ocultar el botón
+        return;
+    }
+
+    // Si es válido, limpiar mensaje de error y mostrar el botón "Iniciar Combate"
+    errorMsg.textContent = "";
+    btnIniciarCombate.style.display = "block";
+
+    // Aquí puedes llamar la lógica para mostrar el Pokémon seleccionado
+    elegirPokemon(inputValue); // Si tienes una función para esto
 });
