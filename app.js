@@ -336,27 +336,34 @@ const rivalAtaque = () => {
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
         actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque especial');
     }
-
-    // Verificar si el propio Pokémon ha perdido
-    if (vidaPropioNum <= 0) {
-        if(vidaPropioNum < 0){
-            vidaPropioNum=0;
+    setTimeout(() => {
+        console.log('Espera ataque rival');
+        // Verificar si el propio Pokémon ha perdido
+        if (vidaPropioNum <= 0) {
+            if(vidaPropioNum < 0){
+                vidaPropioNum=0;
+            }
+            console.log('¡El Pokémon propio ha perdido!');
+            actualizarValores();
+            jugarDeNuevo();
+            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' te ha derrotado');
+            btnAtkFis.style.display = 'none'
+            btnAtkEsp.style.display = 'none'
+            return; // Termina el juego
         }
-        console.log('¡El Pokémon propio ha perdido!');
+
+        // Actualizar valores en la interfaz
         actualizarValores();
-        jugarDeNuevo();
-        actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' te ha derrotado');
-        return; // Termina el juego
-    }
 
-    // Actualizar valores en la interfaz
-    actualizarValores();
-
-    // Habilitar botones de ataque del jugador para su turno
-    btnAtkFis.disabled = false;
-    btnAtkEsp.disabled = false;
-    actualizarMensaje('Tú turno');
-    propioAtaque();
+        // Habilitar botones de ataque del jugador para su turno
+        btnAtkFis.disabled = false;
+        btnAtkEsp.disabled = false;
+        actualizarMensaje('Tú turno');
+        setTimeout(() => {
+            console.log('Espera mi turno');
+            propioAtaque();
+        }, 1000);
+    }, 2000);
 };
 
 // Función que gestiona el ataque del jugador
@@ -367,22 +374,30 @@ const propioAtaque = () => {
         vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 1);
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
         actualizarMensaje(nombrePropio.textContent+' realiza ataque fisico');
-        // Verificar si el rival ha perdido
-        if (vidaRivalNum <= 0) {
-            if(vidaRivalNum < 0){
-                vidaRivalNum=0;
+        setTimeout(() => {
+            console.log('Espera ataque mio');
+            // Verificar si el rival ha perdido
+            if (vidaRivalNum <= 0) {
+                if(vidaRivalNum < 0){
+                    vidaRivalNum=0;
+                }
+                console.log('¡El Pokémon rival ha perdido!');
+                actualizarValores();
+                jugarDeNuevo();
+                actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
+                btnAtkFis.style.display = 'none'
+                btnAtkEsp.style.display = 'none'
+                return; // Termina el juego
             }
-            console.log('¡El Pokémon rival ha perdido!');
-            actualizarValores();
-            jugarDeNuevo();
-            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
-            return; // Termina el juego
-        }
 
-        // Actualizar valores y pasar el turno al rival
-        actualizarValores();
-        actualizarMensaje('Turno del Rival');
-        rivalAtaque();
+            // Actualizar valores y pasar el turno al rival
+            actualizarValores();
+            actualizarMensaje('Turno del Rival');
+            setTimeout(() => {
+                console.log('Espera turno rival');
+                rivalAtaque();
+            }, 1000);
+        }, 2000);
     }, { once: true }); // Agregar el listener solo una vez
 
     // Agregar un único listener para el ataque especial
@@ -391,22 +406,30 @@ const propioAtaque = () => {
         vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 1);
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
         actualizarMensaje(nombrePropio.textContent+' realiza ataque especial');
-        // Verificar si el rival ha perdido
-        if (vidaRivalNum <= 0) {
-            if(vidaRivalNum < 0){
-                vidaRivalNum=0;
+        setTimeout(() => {
+            console.log('Espera ataque esp mio');
+            // Verificar si el rival ha perdido
+            if (vidaRivalNum <= 0) {
+                if(vidaRivalNum < 0){
+                    vidaRivalNum=0;
+                }
+                console.log('¡El Pokémon rival ha perdido!');
+                actualizarValores();
+                jugarDeNuevo();
+                actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
+                btnAtkFis.style.display = 'none'
+                btnAtkEsp.style.display = 'none'
+                return; // Termina el juego
             }
-            console.log('¡El Pokémon rival ha perdido!');
-            actualizarValores();
-            jugarDeNuevo();
-            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
-            return; // Termina el juego
-        }
 
-        // Actualizar valores y pasar el turno al rival
-        actualizarValores();
-        actualizarMensaje('Turno del Rival');
-        rivalAtaque();
+            // Actualizar valores y pasar el turno al rival
+            actualizarValores();
+            actualizarMensaje('Turno del Rival');
+            setTimeout(() => {
+                console.log('Espera turno rival');
+                rivalAtaque();
+            }, 1000);
+        }, 2000);
     }, { once: true }); // Agregar el listener solo una vez
 };
 
@@ -431,11 +454,14 @@ const actualizarValores = () => {
 
 const combate = () => {
     const turno = primerTurno();  // Determina el primer turno
-    if (turno === 1) { // Si el primer turno es del jugador, comienza su ataque
-        propioAtaque();
-    } else { // Si el primer turno es del rival, comienza su ataque
-        rivalAtaque();
-    }
+    setTimeout(() => {
+        console.log('Espera primer turno');
+        if (turno === 1) { // Si el primer turno es del jugador, comienza su ataque
+            propioAtaque();
+        } else { // Si el primer turno es del rival, comienza su ataque
+            rivalAtaque();
+        }
+    }, 1000);
 };
 
 const primerTurno = () => {
