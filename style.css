@@ -384,7 +384,17 @@ Para ocultar el botón al inicio
 #btn-iniciar-combate{
     display: none;
 }
+#btn-jugar-de-nuevo{
+    display: none;
+}
+#btn-atk-fis{
+    display: none;
+}
 
+
+#btn-atk-esp{
+    display: none;
+}
 
 
 

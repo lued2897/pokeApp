@@ -38,6 +38,8 @@ const maxStat = 255;
 
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
+// Referencia al elemento donde aparecerán los mensajes
+const dialogTxt = document.querySelector('#dialogTxt');
 
 //Variables numericas
 
@@ -68,7 +70,7 @@ const btnElegir = document.querySelector('#btn-poke');
 const btnAtkFis  = document.querySelector('#btn-atk-fis');
 const btnAtkEsp  = document.querySelector('#btn-atk-esp');
 const btnCombate = document.querySelector('#btn-iniciar-combate');
-//const btnCombate =
+const btnJugarDeNuevo = document.querySelector('#btn-jugar-de-nuevo');
 
 //Método de número random
 const getNumRandom = () => {
@@ -319,10 +321,12 @@ const rivalAtaque = () => {
         // Ataque físico del rival
         vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 0);
         console.log('Vida del propio después del ataque físico: ', vidaPropioNum);
+        actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque fisico');
     } else {
         // Ataque especial del rival
         vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 0);
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
+        actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque especial');
     }
 
     // Verificar si el propio Pokémon ha perdido
@@ -332,6 +336,8 @@ const rivalAtaque = () => {
         }
         console.log('¡El Pokémon propio ha perdido!');
         actualizarValores();
+        jugarDeNuevo();
+        actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' te ha derrotado');
         return; // Termina el juego
     }
 
@@ -341,6 +347,7 @@ const rivalAtaque = () => {
     // Habilitar botones de ataque del jugador para su turno
     btnAtkFis.disabled = false;
     btnAtkEsp.disabled = false;
+    actualizarMensaje('Tú turno');
     propioAtaque();
 };
 
@@ -351,7 +358,7 @@ const propioAtaque = () => {
         // Ataque físico del jugador
         vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 0);
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
-
+        actualizarMensaje(nombrePropio.textContent+' realiza ataque fisico');
         // Verificar si el rival ha perdido
         if (vidaRivalNum <= 0) {
             if(vidaRivalNum < 0){
@@ -359,11 +366,14 @@ const propioAtaque = () => {
             }
             console.log('¡El Pokémon rival ha perdido!');
             actualizarValores();
+            jugarDeNuevo();
+            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
             return; // Termina el juego
         }
 
         // Actualizar valores y pasar el turno al rival
         actualizarValores();
+        actualizarMensaje('Turno del Rival');
         rivalAtaque();
     }, { once: true }); // Agregar el listener solo una vez
 
@@ -372,7 +382,7 @@ const propioAtaque = () => {
         // Ataque especial del jugador
         vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 0);
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
-
+        actualizarMensaje(nombrePropio.textContent+' realiza ataque especial');
         // Verificar si el rival ha perdido
         if (vidaRivalNum <= 0) {
             if(vidaRivalNum < 0){
@@ -380,11 +390,14 @@ const propioAtaque = () => {
             }
             console.log('¡El Pokémon rival ha perdido!');
             actualizarValores();
+            jugarDeNuevo();
+            actualizarMensaje('El pokemon '+nombreRivalTxt.textContent+' ha sido derrotado');
             return; // Termina el juego
         }
 
         // Actualizar valores y pasar el turno al rival
         actualizarValores();
+        actualizarMensaje('Turno del Rival');
         rivalAtaque();
     }, { once: true }); // Agregar el listener solo una vez
 };
@@ -420,12 +433,29 @@ const combate = () => {
 const primerTurno = () => {
     if ((velocidadPropioNum-velocidadRivalNum>=0)) {
         console.log(velocidadPropioNum-velocidadRivalNum);
+        actualizarMensaje('Inicias tú');
         return 1;
     } else {
         console.log(velocidadPropioNum-velocidadRivalNum);
+        actualizarMensaje('Inicia el rival');
         return 0;
     }
 };  
+
+const jugarDeNuevo = () => {
+    // Asegurar que el botón se muestre correctamente
+    btnJugarDeNuevo.style.display = 'block';
+
+    // Agregar el evento para recargar la página al hacer clic
+    btnJugarDeNuevo.addEventListener('click', function () {
+        location.reload(); // Recarga la página
+    }, { once: true }); // Aseguramos que solo se ejecute una vez
+};
+
+
+const actualizarMensaje = (mensaje) => {
+    dialogTxt.textContent = mensaje; // Cambia el contenido del texto
+};
 
 window.addEventListener('load', obtenerPokeRival);
 window.addEventListener('load', () => {
@@ -442,4 +472,6 @@ btnCombate.addEventListener('click', () => {
     btnCombate.style.display = 'none';
     input.style.display = 'none';
     btnElegir.style.display = 'none';
+    btnAtkFis.style.display = 'block'
+    btnAtkEsp.style.display = 'block'
 });
