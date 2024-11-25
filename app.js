@@ -91,17 +91,19 @@ const obtenerPokePropio = ()=>{
         return res.data
     }).then((res)=>{
         console.log(res);
+
+        const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
+        tipoSpritesContainer.innerHTML = '';
+
         imgPropio.src = res.sprites.back_default;
         if(res.sprites.back_default==null){
             imgPropio.src = res.sprites.front_default;
         }
         console.log('img:')
         console.log(imgPropio.src)
+
         nombrePropio.innerHTML = res.name.toUpperCase();
         nombrePropioStats.innerHTML = res.name.toUpperCase();
-
-        const tipoSpritesContainer = document.getElementById('tipoPropioSprite');
-        tipoSpritesContainer.innerHTML = '';
 
         idPropio.textContent = res.id;
 
@@ -128,7 +130,6 @@ const obtenerPokePropio = ()=>{
         document.querySelector("#ataqueEspPropio .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaEspPropio .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
         document.querySelector("#velocidadPropio .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
-    
 
         res.types.forEach(typeInfo => {
             axios.get(typeInfo.type.url).then(typeRes => {
@@ -137,7 +138,12 @@ const obtenerPokePropio = ()=>{
                 const imgElement = document.createElement('img');
                 imgElement.src = typeSpriteUrl;
                 imgElement.alt = typeInfo.type.name;
-                document.getElementById('tipoPropioSprite').appendChild(imgElement);
+                if (!tipoSpritesContainer.querySelector(`[alt="${typeInfo}"]`)) {
+                    if (!tipoSpritesContainer.querySelector(`[alt="${typeInfo.type.name}"]`)) {
+                        tipoSpritesContainer.appendChild(imgElement);
+                    }
+                }
+                //document.getElementById('tipoPropioSprite').appendChild(imgElement);
             }).catch(err => {
                 console.error("Error fetching type data:", err);
             });
@@ -222,7 +228,9 @@ const obtenerPokeRival = () => {
         document.querySelector("#ataqueEspRival .stat-bar-inner").style.width = `${(res.stats[3].base_stat / maxStat) * 100}%`;
         document.querySelector("#defensaEspRival .stat-bar-inner").style.width = `${(res.stats[4].base_stat / maxStat) * 100}%`;
         document.querySelector("#velocidadRival .stat-bar-inner").style.width = `${(res.stats[5].base_stat / maxStat) * 100}%`;
-    
+        
+        
+
         res.types.forEach(typeInfo => {
             axios.get(typeInfo.type.url).then(typeRes => {
                 const typeData = typeRes.data;
