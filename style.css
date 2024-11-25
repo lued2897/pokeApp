@@ -12,6 +12,13 @@ body{
     flex-direction: column;
     font-family: 'miFuente', sans-serif ;
     font-size: 0.8em;
+    background: linear-gradient(135deg, 
+        #2d4545 0%, /* Versión más oscura */
+        #68a0a0 50%, /* Color original como punto medio */
+        #3a5757 100% /* Versión oscura diferente */
+    );
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -29,24 +36,29 @@ body{
     margin-top: 5%;
     display: flex;
     width: 50%;
-    background-color: #68a0a0;
+    background-color: rgba(104, 160, 160, 0.9);
     display: flex;
     flex-flow: row;
     justify-content: center;
     position: relative;
-
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    padding: 10px;
 }
 
 #arena{
     position: relative;
-    width: 65.7vh;
-    height: 40vh;
+    width: 64vh;
+    height: 36vh;
     /*background-image: url('./fondo.png');*/
     /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.1)), url('./BGS/battlebg_1.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     margin: 0 auto;
+    border: 10px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     /*border: 10px;
     border-style: solid;
     border-color: #411e09f7;*/
@@ -238,7 +250,7 @@ color: #ffffff; /* Color del texto */
 }
 
 .stats {
-    background-color: rgba(40, 40, 40, 0.9);
+    background-color: rgba(255, 255, 255, 0.8);
     border: 3px solid #6d6d6d;
     border-radius: 10px;
     padding: 10px;
@@ -246,13 +258,18 @@ color: #ffffff; /* Color del texto */
     text-align: left;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     font-size: 0.88em; 
+    overflow: visible;
 }
 
 .stats h3 {
     color: #222;
     font-size: 1.2rem;
     margin-bottom: 5px;
+    text-align: center;
     text-transform: uppercase;
+    white-space: normal; /* Evita que el texto haga saltos de línea */
+    word-wrap: break-word; /* Fuerza el salto de línea en palabras largas */
+    width: 100%;
 }
 
 .stats p {
@@ -397,7 +414,22 @@ Para ocultar el botón al inicio
 }
 
 
+#input {
+    font-family: 'miFuente', sans-serif; 
+    font-size: 1em; 
+    padding: 3px; 
+    border: 2px solid #68A0A0; 
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f8f8f8; 
+    color: #333; 
+    transition: border-color 0.3s ease; 
+}
 
+#input:focus {
+    border-color: #68a0a0;
+    box-shadow: 0 0 5px #68a0a0; 
+}
  
 
 /*.type.bug {background-color: #A6B91A; }
