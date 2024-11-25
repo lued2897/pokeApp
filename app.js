@@ -327,6 +327,9 @@ const rivalAtaque = () => {
 
     // Verificar si el propio Pokémon ha perdido
     if (vidaPropioNum <= 0) {
+        if(vidaPropioNum < 0){
+            vidaPropioNum=0;
+        }
         console.log('¡El Pokémon propio ha perdido!');
         actualizarValores();
         return; // Termina el juego
@@ -351,6 +354,9 @@ const propioAtaque = () => {
 
         // Verificar si el rival ha perdido
         if (vidaRivalNum <= 0) {
+            if(vidaRivalNum < 0){
+                vidaRivalNum=0;
+            }
             console.log('¡El Pokémon rival ha perdido!');
             actualizarValores();
             return; // Termina el juego
@@ -369,6 +375,9 @@ const propioAtaque = () => {
 
         // Verificar si el rival ha perdido
         if (vidaRivalNum <= 0) {
+            if(vidaRivalNum < 0){
+                vidaRivalNum=0;
+            }
             console.log('¡El Pokémon rival ha perdido!');
             actualizarValores();
             return; // Termina el juego
@@ -409,7 +418,7 @@ const combate = () => {
 };
 
 const primerTurno = () => {
-    if ((velocidadPropioNum-velocidadRivalNum>0)|(velocidadPropioNum-velocidadRivalNum===0)) {
+    if ((velocidadPropioNum-velocidadRivalNum>=0)) {
         console.log(velocidadPropioNum-velocidadRivalNum);
         return 1;
     } else {
