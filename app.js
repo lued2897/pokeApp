@@ -1,5 +1,5 @@
 //JavaScript
-
+//console.log(JSON.parse())
 //Atributos poke rival
 const imgRival = document.querySelector('#pokeRival'); //querySelectroAll('div')
 const nombreRival = document.querySelector('#nombreRival');
@@ -7,8 +7,8 @@ const nombreRivalStats = document.querySelector('#nombreRivalStats');
 const nombreRivalTxt = document.querySelector('#nombreRivalTxt');
 const idRival = document.querySelector('#rival-num');
 
-const tipo1Rival = document.querySelector('#tipo1Rival');
-const tipo2Rival = document.querySelector('#tipo2Rival');
+let tipo1Rival 
+let tipo2Rival 
 const atkFisRival = document.querySelector('#ataqueFisRival'); 
 const atkEspRival = document.querySelector('#ataqueEspRival');
 const vidaRival = document.querySelector('#vidaRival');
@@ -24,8 +24,8 @@ const nombrePropioStats = document.querySelector('#nombrePropioStats');
 const idPropio = document.querySelector('#propio-num');
 
 
-const tipo1Propio = document.querySelector('#tipo1Propio');
-const tipo2Propio = document.querySelector('#tipo2Propio');
+let tipo1Propio
+let tipo2Propio
 const atkFisPropio = document.querySelector('#ataqueFisPropio'); 
 const atkEspPropio = document.querySelector('#ataqueEspPropio');
 const vidaPropio = document.querySelector('#vidaPropio');
@@ -38,6 +38,23 @@ const maxStat = 255;
 
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
+let jsonData
+async function loadJSON() {
+    try {
+      const response = await fetch('all_types.json');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      jsonData = await response.json();
+      console.log('JSON Data:', jsonData);
+
+    } catch (error) {
+      console.error('Error loading JSON:', error);
+    }
+  }
+
+loadJSON();
 
 //Variables numericas
 
@@ -93,6 +110,17 @@ const obtenerPokePropio = ()=>{
         if(res.sprites.back_default==null){
             imgPropio.src = res.sprites.front_default;
         }
+
+        tipo1Propio=res.types[0].type.name;
+        if(res.types[1] == undefined){
+            console.log('es null;')
+            tipo2Propio = '';
+            console.log('tipos propio:',tipo1Propio,tipo2Propio)
+        }else{
+            tipo2Propio = res.types[1].type.name;
+            console.log('tipos propio:',tipo1Propio,tipo2Propio)
+        }
+
         console.log('img:')
         console.log(imgPropio.src)
         nombrePropio.innerHTML = res.name.toUpperCase();
@@ -143,6 +171,7 @@ const obtenerPokePropio = ()=>{
     }).catch((error) => {
         console.error('Error al obtener el Pokémon:', error);
     });
+    console.log('mamada',jsonData['normal']['normal'])
 };
 //Se generará un pokemon rival aleatorio 
 /*const obtenerPokeRival = () =>{
@@ -182,6 +211,16 @@ const obtenerPokeRival = () => {
         return res.data;
     }).then((res) => {
         console.log(res);
+
+        tipo1Rival = res.types[0].type.name;
+        if(res.types[1] == undefined){
+            console.log('es null;')
+            tipo2Propio = '';
+            console.log('tipos rival:',tipo1Rival,tipo2Rival)
+        }else{
+            tipo2Rival = res.types[1].type.name;
+            console.log('tipos rival:',tipo1Rival,tipo2Rival)
+        }
 
         imgRival.src = res.sprites.front_default;
         idRival.textContent = res.id;
@@ -236,6 +275,7 @@ const obtenerPokeRival = () => {
     }).catch(err => {
         console.error("Error fetching Pokémon data:", err);
     });
+
 };
 
 
@@ -315,13 +355,15 @@ const rivalAtaque = () => {
     btnAtkEsp.disabled = true;
 
     // Decidir el tipo de ataque del rival (físico o especial)
+    let mult=multiplicador(tipo1Propio,tipo2Propio,tipo1Rival,tipo2Rival)
     if (Math.round(Math.random()) === 1) {
         // Ataque físico del rival
-        vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 0);
+        
+        vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 1)*mult;
         console.log('Vida del propio después del ataque físico: ', vidaPropioNum);
     } else {
         // Ataque especial del rival
-        vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 0);
+        vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 1)*mult;
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
     }
 
@@ -349,7 +391,9 @@ const propioAtaque = () => {
     // Agregar un único listener para el ataque físico
     btnAtkFis.addEventListener('click', () => {
         // Ataque físico del jugador
-        vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 0);
+        let mult=multiplicador(tipo1Propio,tipo2Propio,tipo1Rival,tipo2Rival)
+        //console.log('ATAQUE MULTIPLICADOR',mult)
+        vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 1)*mult;
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
 
         // Verificar si el rival ha perdido
@@ -370,7 +414,8 @@ const propioAtaque = () => {
     // Agregar un único listener para el ataque especial
     btnAtkEsp.addEventListener('click', () => {
         // Ataque especial del jugador
-        vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 0);
+        let mult=multiplicador(tipo1Propio,tipo2Propio,tipo1Rival,tipo2Rival)
+        vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 1)*mult;
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
 
         // Verificar si el rival ha perdido
@@ -416,6 +461,26 @@ const combate = () => {
         rivalAtaque();
     }
 };
+
+function multiplicador( tipoAtaca, tipo2Ataca, tipoDefiende, tipo2Defiende){
+    let mult
+    console.log('TIPOS ATAQUE',String(tipoAtaca),String(tipo2Ataca),String(tipoDefiende),String(tipo2Defiende))
+    if (tipo2Ataca !== '' && tipo2Defiende !== ''){
+        mult = Math.max(jsonData[String(tipoAtaca)][String(tipoDefiende)],
+                        jsonData[String(tipoAtaca)][String(tipo2Defiende)],
+                        jsonData[String(tipo2Ataca)][String(tipoDefiende)],
+                        jsonData[String(tipo2Ataca)][String(tipo2Defiende)],)
+    }else if(tipo2Ataca === '' && tipo2Defiende === ''){
+        mult = jsonData[String(tipo2Ataca)][String(tipoDefiende)]
+    }else if (tipo2Ataca === ''){
+        mult = Math.max(jsonData[String(tipoAtaca)][String(tipoDefiende)],
+                        jsonData[String(tipoAtaca)][String(tipo2Defiende)])
+    }else{
+        mult = Math.max(jsonData[String(tipoAtaca)][String(tipoDefiende)],
+                        jsonData[String(tipo2Ataca)][String(tipoDefiende)])
+    }
+    return mult
+}
 
 const primerTurno = () => {
     if ((velocidadPropioNum-velocidadRivalNum>=0)) {
