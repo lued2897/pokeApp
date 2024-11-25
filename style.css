@@ -396,6 +396,22 @@ Para ocultar el botón al inicio
     display: none;
 }
 
+#input {
+    font-family: 'miFuente', sans-serif; 
+    font-size: 1em; 
+    padding: 3px; 
+    border: 2px solid #68A0A0; 
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f8f8f8; 
+    color: #333; 
+    transition: border-color 0.3s ease; 
+}
+
+#input:focus {
+    border-color: #68a0a0;
+    box-shadow: 0 0 5px #68a0a0; 
+}
 
 
  
