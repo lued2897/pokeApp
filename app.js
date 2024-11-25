@@ -308,8 +308,13 @@ function showError(message) {
     obtenerPokePropio();
   });
 
+// Función que gestiona el ataque del rival
 const rivalAtaque = () => {
-    // El rival ataca, elige entre ataque físico o especial aleatoriamente
+    // Deshabilitar botones de ataque del jugador para garantizar turnos
+    btnAtkFis.disabled = true;
+    btnAtkEsp.disabled = true;
+
+    // Decidir el tipo de ataque del rival (físico o especial)
     if (Math.round(Math.random()) === 1) {
         // Ataque físico del rival
         vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 0);
@@ -319,57 +324,60 @@ const rivalAtaque = () => {
         vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 0);
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
     }
-    
-    // Verifica si la vida del propio Pokémon llegó a 0 o menos
+
+    // Verificar si el propio Pokémon ha perdido
     if (vidaPropioNum <= 0) {
-        console.log('El Pokémon propio ha perdido!');
-        return; // Termina el combate
+        console.log('¡El Pokémon propio ha perdido!');
+        actualizarValores();
+        return; // Termina el juego
     }
-    
-    // Actualizamos los valores en el DOM
+
+    // Actualizar valores en la interfaz
     actualizarValores();
-    
-    // Si el combate no ha terminado, el jugador puede atacar
+
+    // Habilitar botones de ataque del jugador para su turno
+    btnAtkFis.disabled = false;
+    btnAtkEsp.disabled = false;
     propioAtaque();
 };
 
+// Función que gestiona el ataque del jugador
 const propioAtaque = () => {
-    // Espera que el jugador haga clic en un botón para atacar
+    // Agregar un único listener para el ataque físico
     btnAtkFis.addEventListener('click', () => {
         // Ataque físico del jugador
         vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 0);
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
-        
-        // Verifica si la vida del rival llegó a 0 o menos
-        if (vidaRivalNum <= 0) {
-            console.log('El Pokémon rival ha perdido!');
-            return; // Termina el combate
-        }
-        
-        // Actualizamos los valores en el DOM
-        actualizarValores();
-        
-        // Si el combate no ha terminado, el rival atacará
-        rivalAtaque();
-    });
 
+        // Verificar si el rival ha perdido
+        if (vidaRivalNum <= 0) {
+            console.log('¡El Pokémon rival ha perdido!');
+            actualizarValores();
+            return; // Termina el juego
+        }
+
+        // Actualizar valores y pasar el turno al rival
+        actualizarValores();
+        rivalAtaque();
+    }, { once: true }); // Agregar el listener solo una vez
+
+    // Agregar un único listener para el ataque especial
     btnAtkEsp.addEventListener('click', () => {
         // Ataque especial del jugador
         vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 0);
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
-        
-        // Verifica si la vida del rival llegó a 0 o menos
+
+        // Verificar si el rival ha perdido
         if (vidaRivalNum <= 0) {
-            console.log('El Pokémon rival ha perdido!');
-            return; // Termina el combate
+            console.log('¡El Pokémon rival ha perdido!');
+            actualizarValores();
+            return; // Termina el juego
         }
-        
-        // Actualizamos los valores en el DOM
+
+        // Actualizar valores y pasar el turno al rival
         actualizarValores();
-        
-        // Si el combate no ha terminado, el rival atacará
         rivalAtaque();
-    });
+    }, { once: true }); // Agregar el listener solo una vez
 };
 
 
@@ -380,8 +388,13 @@ const actualizarValores = () => {
     vidaPropio.innerHTML = vidaPropioNum;
     
     // Actualizamos las barras de estado (stat bars)
-    document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(vidaRivalNum / maxStat) * 100}%`;
-    document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(vidaPropioNum / maxStat) * 100}%`;
+    document.getElementById("vidaPropioStats").innerHTML=vidaPropioNum;
+    document.querySelector("#vidaRival .stat-bar-inner").style.width = '${(vidaRivalNum / maxStat) * 100}%';
+    document.querySelector("#vidaRivalStats .stat-bar-inner").style.width = '${(vidaRivalNum / maxStat) * 100}%';
+
+    document.getElementById("vidaRivalStats").innerHTML=vidaRivalNum;
+    document.querySelector("#vidaPropio .stat-bar-inner").style.width = '${(vidaPropioNum / maxStat) * 100}%';
+    document.querySelector("#vidaPropioStats .stat-bar-inner").style.width = '${(vidaPropioNum / maxStat) * 100}%';
 };
 
 //Desde aqui funciona al 100 o a lo esperado 
