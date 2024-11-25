@@ -223,7 +223,7 @@ const obtenerPokeRival = () => {
         tipo1Rival = res.types[0].type.name;
         if(res.types[1] == undefined){
             console.log('es null;')
-            tipo2Propio = '';
+            tipo2Rival = '';
             console.log('tipos rival:',tipo1Rival,tipo2Rival)
         }else{
             tipo2Rival = res.types[1].type.name;
