@@ -44,6 +44,7 @@ const input = document.querySelector('#input');
 const btnElegir = document.querySelector('#btn-poke');
 const btnAtkFis  = document.querySelector('#btn-atk-fis');
 const btnAtkEsp  = document.querySelector('#btn-atk-esp');
+const btnCombate = document.querySelector('#btn-iniciar-combate');
 //const btnCombate =
 
 //Método de número random
@@ -200,18 +201,6 @@ const obtenerPokeRival = () => {
     });
 };
 
-//Combate, el pokemon perdedor será el que se le acabe primero su vida.
-//El usuario deberá elegir si ocupa ataque fisico o especial, según lo elegido los pokemon usarán su defensa especial o defensa fisica para bloquear los ataques
-//La defensa especial o fisica del pokemon que recibe el ataque sera restada del ataque especial o fisico del pokemon atacante, la diferencia será restada a la vida del pokemon defensor
-//En caso de que el resultado de la resta sea negativo o cero, se va a dejar un 1 como el resultado minimo de la resta
-//El pokemon que tenga más velocidad va a pegar primero
-//Se debe de aplicar la tabla de tipos al resultado de la resta de defensa y ataque, pero solo en daño, no en resitencias
-//Ejemplo poke1AtaqueFisico = 56;
-// poke2Defensafisica = 35; poke2vida = 98;
-// DañoRecibido = poke1AtaqueFisico - poke2DefensaFisica;
-//poke2VidaRestante = poke2Vida - DañoRecibido;
-//Se turnarán los pokemon hasta que haya un ganador
-//Mostrar el ganador
 
 const updateStatBar = (elementId, value, maxValue) => {
     const percentage = (value / maxValue) * 100;
@@ -222,10 +211,6 @@ const updateStatBar = (elementId, value, maxValue) => {
      element.className = `type ${type}`; // Add appropriate type class
  };
 
-const combate = ()=>{
-    console.log('Estan peleando');
-    
-}
 
 document.addEventListener('DOMContentLoaded', ()=> {
 
@@ -286,4 +271,139 @@ function showError(message) {
     obtenerPokePropio();
   });
 
-btnAtkFis.addEventListener('click',combate);
+  const combate = () => {
+    const turno = primerTurno();  // Determina el primer turno
+    if (turno === 1) {
+        // Si el primer turno es del jugador, comienza su ataque
+        propioAtaque();
+    } else {
+        // Si el primer turno es del rival, comienza su ataque
+        rivalAtaque();
+    }
+};
+
+const rivalAtaque = () => {
+    // El rival ataca, elige entre ataque físico o especial aleatoriamente
+    if (Math.round(Math.random()) === 1) {
+        // Ataque físico del rival
+        vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 0);
+        console.log('Vida del propio después del ataque físico: ', vidaPropioNum);
+    } else {
+        // Ataque especial del rival
+        vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 0);
+        console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
+    }
+    
+    // Verifica si la vida del propio Pokémon llegó a 0 o menos
+    if (vidaPropioNum <= 0) {
+        console.log('El Pokémon propio ha perdido!');
+        return; // Termina el combate
+    }
+    
+    // Actualizamos los valores en el DOM
+    actualizarValores();
+    
+    // Si el combate no ha terminado, el jugador puede atacar
+    propioAtaque();
+};
+
+const propioAtaque = () => {
+    // Espera que el jugador haga clic en un botón para atacar
+    btnAtkFis.addEventListener('click', () => {
+        // Ataque físico del jugador
+        vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 0);
+        console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
+        
+        // Verifica si la vida del rival llegó a 0 o menos
+        if (vidaRivalNum <= 0) {
+            console.log('El Pokémon rival ha perdido!');
+            return; // Termina el combate
+        }
+        
+        // Actualizamos los valores en el DOM
+        actualizarValores();
+        
+        // Si el combate no ha terminado, el rival atacará
+        rivalAtaque();
+    });
+
+    btnAtkEsp.addEventListener('click', () => {
+        // Ataque especial del jugador
+        vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 0);
+        console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
+        
+        // Verifica si la vida del rival llegó a 0 o menos
+        if (vidaRivalNum <= 0) {
+            console.log('El Pokémon rival ha perdido!');
+            return; // Termina el combate
+        }
+        
+        // Actualizamos los valores en el DOM
+        actualizarValores();
+        
+        // Si el combate no ha terminado, el rival atacará
+        rivalAtaque();
+    });
+};
+const primerTurno = () => {
+    const velocidadPropioNum = Number(velocidadPropio.innerHTML);
+    const velocidadRivalNum = Number(velocidadRival.innerHTML);
+    if ((velocidadPropioNum-velocidadRivalNum>0)|(velocidadPropioNum-velocidadRivalNum===0)) {
+        console.log(velocidadPropioNum-velocidadRivalNum);
+        return 1;
+    } else {
+        console.log(velocidadPropioNum-velocidadRivalNum);
+        return 0;
+    }
+};
+
+window.addEventListener('load', obtenerPokeRival);
+window.addEventListener('load', () => {
+    input.value = '';
+});
+
+btnElegir.addEventListener('click', obtenerPokePropio);
+btnElegir.addEventListener('click', () => {
+    btnCombate.style.display = 'block';
+});
+
+btnCombate.addEventListener('click',combate)
+btnCombate.addEventListener('click', () => {
+    btnCombate.style.display = 'none';
+    input.style.display = 'none';
+    btnElegir.style.display = 'none';
+});
+  //Variables numericas
+
+//Atributos poke rival
+
+//const tipo1RivalNum = document.querySelector('#tipo1Rival');
+//const tipo2RivalNum = document.querySelector('#tipo2Rival');
+let atkFisRivalNum = Number(atkFisRival.innerHTML);
+let atkEspRivalNum = Number(atkEspRival.innerHTML);
+let vidaRivalNum = Number(vidaRival.innerHTML);
+let defensaEspRivalNum = Number(defensaEspRival.innerHTML);
+let defensaFisRivalNum = Number(defensaFisRival.innerHTML);
+
+
+//Atributos poke propio
+
+//let tipo1PropioNum = document.querySelector('#tipo1Propio');
+//let tipo2PropioNum = document.querySelector('#tipo2Propio');
+let atkFisPropioNum = Number(atkFisPropio.innerHTML);
+let atkEspPropioNum =Number(atkEspPropio.innerHTML);
+let vidaPropioNum = Number(vidaPropio.innerHTML);
+let defensaEspPropioNum = Number(defensaEspPropio.innerHTML);
+let defensaFisPropioNum = Number(defensaFisPropio.innerHTML);
+
+// Función para actualizar los valores en el DOM después de cada ataque
+const actualizarValores = () => {
+    // Actualizamos la vida de los Pokémon
+    vidaRival.innerHTML = vidaRivalNum;
+    vidaPropio.innerHTML = vidaPropioNum;
+    
+    // Actualizamos las barras de estado (stat bars)
+    document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(vidaRivalNum / maxStat) * 100}%`;
+    document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(vidaPropioNum / maxStat) * 100}%`;
+};
+
