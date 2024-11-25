@@ -319,12 +319,12 @@ const rivalAtaque = () => {
     // Decidir el tipo de ataque del rival (físico o especial)
     if (Math.round(Math.random()) === 1) {
         // Ataque físico del rival
-        vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 0);
+        vidaPropioNum = vidaPropioNum - Math.max((atkFisRivalNum - defensaFisPropioNum), 1);
         console.log('Vida del propio después del ataque físico: ', vidaPropioNum);
         actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque fisico');
     } else {
         // Ataque especial del rival
-        vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 0);
+        vidaPropioNum = vidaPropioNum - Math.max((atkEspRivalNum - defensaEspPropioNum), 1);
         console.log('Vida del propio después del ataque especial: ', vidaPropioNum);
         actualizarMensaje(nombreRivalTxt.textContent+' realiza ataque especial');
     }
@@ -356,7 +356,7 @@ const propioAtaque = () => {
     // Agregar un único listener para el ataque físico
     btnAtkFis.addEventListener('click', () => {
         // Ataque físico del jugador
-        vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 0);
+        vidaRivalNum = vidaRivalNum - Math.max((atkFisPropioNum - defensaFisRivalNum), 1);
         console.log('Vida del rival después del ataque físico: ', vidaRivalNum);
         actualizarMensaje(nombrePropio.textContent+' realiza ataque fisico');
         // Verificar si el rival ha perdido
@@ -380,7 +380,7 @@ const propioAtaque = () => {
     // Agregar un único listener para el ataque especial
     btnAtkEsp.addEventListener('click', () => {
         // Ataque especial del jugador
-        vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 0);
+        vidaRivalNum = vidaRivalNum - Math.max((atkEspPropioNum - defensaEspRivalNum), 1);
         console.log('Vida del rival después del ataque especial: ', vidaRivalNum);
         actualizarMensaje(nombrePropio.textContent+' realiza ataque especial');
         // Verificar si el rival ha perdido
@@ -474,4 +474,25 @@ btnCombate.addEventListener('click', () => {
     btnElegir.style.display = 'none';
     btnAtkFis.style.display = 'block'
     btnAtkEsp.style.display = 'block'
+});
+
+document.getElementById('btn-poke').addEventListener('click', function () {
+    const inputElement = document.getElementById('input');
+    const inputValue = inputElement.value.trim();
+    const errorMsg = document.getElementById('error-msg');
+    const btnIniciarCombate = document.getElementById('btn-iniciar-combate');
+
+    // Validar que el input sea un número entre 1 y 1025
+    if (!inputValue || isNaN(inputValue) || inputValue < 1 || inputValue > 1025) {
+        errorMsg.textContent = "Por favor, ingresa un número válido entre 1 y 1025.";
+        btnIniciarCombate.style.display = "none"; // Asegurarse de ocultar el botón
+        return;
+    }
+
+    // Si es válido, limpiar mensaje de error y mostrar el botón "Iniciar Combate"
+    errorMsg.textContent = "";
+    btnIniciarCombate.style.display = "block";
+
+    // Aquí puedes llamar la lógica para mostrar el Pokémon seleccionado
+    elegirPokemon(inputValue); // Si tienes una función para esto
 });
