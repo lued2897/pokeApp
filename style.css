@@ -386,8 +386,9 @@ color: #ffffff; /* Color del texto */
 
 .error-msg {
     font-family: 'miFuente', sans-serif;
-    color: #cf5132;
-    font-size: 0.8em;
+    color: #b90d0d;
+    font-weight: bold;
+    font-size: 0.9em;
     position: absolute;
     bottom: -20px;
     left: 50%;
