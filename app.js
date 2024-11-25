@@ -38,6 +38,29 @@ const maxStat = 255;
 
 imgPropio.src='https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
+
+//Variables numericas
+
+//Atributos poke rival
+//const tipo1RivalNum = document.querySelector('#tipo1Rival');
+//const tipo2RivalNum = document.querySelector('#tipo2Rival');
+let atkFisRivalNum;
+let atkEspRivalNum;
+let vidaRivalNum ;
+let defensaEspRivalNum ;
+let defensaFisRivalNum ;
+
+//Atributos poke propio
+//let tipo1PropioNum = document.querySelector('#tipo1Propio');
+//let tipo2PropioNum = document.querySelector('#tipo2Propio');
+let atkFisPropioNum ;
+let atkEspPropioNum ;
+let vidaPropioNum ;
+let defensaEspPropioNum ;
+let defensaFisPropioNum ;
+
+let velocidadPropioNum;
+let velocidadRivalNum ;
 //Interfaz de usuario
 
 const input = document.querySelector('#input');
@@ -88,6 +111,12 @@ const obtenerPokePropio = ()=>{
         defensaEspPropio.innerHTML = res.stats[4].base_stat;
         velocidadPropio.innerHTML = res.stats[5].base_stat;
         
+        vidaPropioNum = res.stats[0].base_stat;
+        atkFisPropioNum = res.stats[1].base_stat;
+        defensaFisPropioNum = res.stats[2].base_stat;
+        atkEspPropioNum = res.stats[3].base_stat;
+        defensaEspPropioNum = res.stats[4].base_stat;
+        velocidadPropioNum = res.stats[5].base_stat;
 
 
         document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
@@ -174,6 +203,14 @@ const obtenerPokeRival = () => {
         atkEspRival.innerHTML = res.stats[3].base_stat;
         defensaEspRival.innerHTML = res.stats[4].base_stat;
         velocidadRival.innerHTML = res.stats[5].base_stat;
+
+        //Stats Operables
+        vidaRivalNum = res.stats[0].base_stat;
+        atkFisRivalNum = res.stats[1].base_stat;
+        defensaFisRivalNum = res.stats[2].base_stat;
+        atkEspRivalNum = res.stats[3].base_stat;
+        defensaEspRivalNum = res.stats[4].base_stat;
+        velocidadRivalNum = res.stats[5].base_stat;
 
         // Update stat bars dynamically
         document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(res.stats[0].base_stat / maxStat) * 100}%`;
@@ -271,17 +308,6 @@ function showError(message) {
     obtenerPokePropio();
   });
 
-  const combate = () => {
-    const turno = primerTurno();  // Determina el primer turno
-    if (turno === 1) {
-        // Si el primer turno es del jugador, comienza su ataque
-        propioAtaque();
-    } else {
-        // Si el primer turno es del rival, comienza su ataque
-        rivalAtaque();
-    }
-};
-
 const rivalAtaque = () => {
     // El rival ataca, elige entre ataque físico o especial aleatoriamente
     if (Math.round(Math.random()) === 1) {
@@ -345,9 +371,31 @@ const propioAtaque = () => {
         rivalAtaque();
     });
 };
+
+
+// Función para actualizar los valores en el DOM después de cada ataque
+const actualizarValores = () => {
+    // Actualizamos la vida de los Pokémon
+    vidaRival.innerHTML = vidaRivalNum;
+    vidaPropio.innerHTML = vidaPropioNum;
+    
+    // Actualizamos las barras de estado (stat bars)
+    document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(vidaRivalNum / maxStat) * 100}%`;
+    document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(vidaPropioNum / maxStat) * 100}%`;
+};
+
+//Desde aqui funciona al 100 o a lo esperado 
+
+const combate = () => {
+    const turno = primerTurno();  // Determina el primer turno
+    if (turno === 1) { // Si el primer turno es del jugador, comienza su ataque
+        propioAtaque();
+    } else { // Si el primer turno es del rival, comienza su ataque
+        rivalAtaque();
+    }
+};
+
 const primerTurno = () => {
-    const velocidadPropioNum = Number(velocidadPropio.innerHTML);
-    const velocidadRivalNum = Number(velocidadRival.innerHTML);
     if ((velocidadPropioNum-velocidadRivalNum>0)|(velocidadPropioNum-velocidadRivalNum===0)) {
         console.log(velocidadPropioNum-velocidadRivalNum);
         return 1;
@@ -355,7 +403,7 @@ const primerTurno = () => {
         console.log(velocidadPropioNum-velocidadRivalNum);
         return 0;
     }
-};
+};  
 
 window.addEventListener('load', obtenerPokeRival);
 window.addEventListener('load', () => {
@@ -373,37 +421,3 @@ btnCombate.addEventListener('click', () => {
     input.style.display = 'none';
     btnElegir.style.display = 'none';
 });
-  //Variables numericas
-
-//Atributos poke rival
-
-//const tipo1RivalNum = document.querySelector('#tipo1Rival');
-//const tipo2RivalNum = document.querySelector('#tipo2Rival');
-let atkFisRivalNum = Number(atkFisRival.innerHTML);
-let atkEspRivalNum = Number(atkEspRival.innerHTML);
-let vidaRivalNum = Number(vidaRival.innerHTML);
-let defensaEspRivalNum = Number(defensaEspRival.innerHTML);
-let defensaFisRivalNum = Number(defensaFisRival.innerHTML);
-
-
-//Atributos poke propio
-
-//let tipo1PropioNum = document.querySelector('#tipo1Propio');
-//let tipo2PropioNum = document.querySelector('#tipo2Propio');
-let atkFisPropioNum = Number(atkFisPropio.innerHTML);
-let atkEspPropioNum =Number(atkEspPropio.innerHTML);
-let vidaPropioNum = Number(vidaPropio.innerHTML);
-let defensaEspPropioNum = Number(defensaEspPropio.innerHTML);
-let defensaFisPropioNum = Number(defensaFisPropio.innerHTML);
-
-// Función para actualizar los valores en el DOM después de cada ataque
-const actualizarValores = () => {
-    // Actualizamos la vida de los Pokémon
-    vidaRival.innerHTML = vidaRivalNum;
-    vidaPropio.innerHTML = vidaPropioNum;
-    
-    // Actualizamos las barras de estado (stat bars)
-    document.querySelector("#vidaRival .stat-bar-inner").style.width = `${(vidaRivalNum / maxStat) * 100}%`;
-    document.querySelector("#vidaPropio .stat-bar-inner").style.width = `${(vidaPropioNum / maxStat) * 100}%`;
-};
-
