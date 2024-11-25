@@ -518,7 +518,7 @@ function multiplicador( tipoAtaca, tipo2Ataca, tipoDefiende, tipo2Defiende){
                         jsonData[String(tipo2Ataca)][String(tipoDefiende)],
                         jsonData[String(tipo2Ataca)][String(tipo2Defiende)],)
     }else if(tipo2Ataca === '' && tipo2Defiende === ''){
-        mult = jsonData[String(tipo2Ataca)][String(tipoDefiende)]
+        mult = jsonData[String(tipoAtaca)][String(tipoDefiende)]
     }else if (tipo2Ataca === ''){
         mult = Math.max(jsonData[String(tipoAtaca)][String(tipoDefiende)],
                         jsonData[String(tipoAtaca)][String(tipo2Defiende)])
